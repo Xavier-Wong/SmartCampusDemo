@@ -10,6 +10,7 @@ import com.example.xavier.smartcampusdemo.R;
 
 /**
  * Created by Xavier on 11/7/2016.
+ * microBlogFragment
  */
 
 public class microBlog extends Fragment {
@@ -18,6 +19,6 @@ public class microBlog extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.microblog_fragment, null);
+        return inflater.inflate(R.layout.microblog_fragment, container, false);
     }
 }

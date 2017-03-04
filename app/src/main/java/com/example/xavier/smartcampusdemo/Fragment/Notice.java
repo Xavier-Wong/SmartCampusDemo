@@ -10,6 +10,7 @@ import com.example.xavier.smartcampusdemo.R;
 
 /**
  * Created by Xavier on 11/7/2016.
+ * NoticeFragment
  */
 
 public class Notice extends Fragment {
@@ -18,6 +19,6 @@ public class Notice extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.notic_fragment, null);
+        return inflater.inflate(R.layout.notic_fragment, container, false);
     }
 }
