@@ -3,21 +3,28 @@ package com.example.xavier.smartcampusdemo.Service;
 import android.support.annotation.Nullable;
 
 import com.example.xavier.smartcampusdemo.Entity.forum;
+import com.example.xavier.smartcampusdemo.Entity.forum_reply;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import static com.example.xavier.smartcampusdemo.Util.JSONUtil.getJsonObjects;
+import static com.example.xavier.smartcampusdemo.Util.TimeConvertor.stampToDate;
 
 /**
  * Created by Xavier on 11/12/2016.
@@ -80,7 +87,65 @@ public class ForumItemService extends NetService{
         return temp;
     }
 
-    public static List<forum> getForumItem(int page) {
+    public static String executeGetForumReply(String id) {
+
+        String temp = "";
+        temp = httpConnect(3, id);
+        return temp;
+    }
+
+//    public static String publishForum() {
+//        Properties properties = System.getProperties();
+//        properties.list(System.out);
+//        String url = "http://" + getIP() + "/HelloWeb/ForumPublishLet";
+//        try {
+//            URL httpUrl = new URL(url);
+//            HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();
+//            conn.setReadTimeout(3000);
+//            conn.setRequestMethod("POST");
+//
+//            OutputStream out = conn.getOutputStream();
+//            String request = "author="+author+"&content="+content+"&title="+title+"&type="+type;
+//            out.write(request.getBytes());
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//            String str;
+//            StringBuffer sb = new StringBuffer();
+//            while((str = bufferedReader.readLine())!= null){
+//                sb.append(str);
+//            }
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public static List<forum_reply> getForumItemReply(Integer page, String id) {
+        List<forum_reply> forumReplyItems = new ArrayList<>();
+        if(!executeGetForumReply(id).equals("invalid")) {
+            JSONObject[] jsonObjects = getJsonObjects(executeGetForumReply(id));
+            try {
+                if (jsonObjects != null && jsonObjects.length > 0) {
+                    for (JSONObject jsonObject : jsonObjects) {
+                        if (Integer.parseInt(jsonObject.getString("page")) == page) {
+                            forum_reply forumReplyItem = new forum_reply();
+                            forumReplyItem.setF_id(jsonObject.getInt("foid"));
+                            forumReplyItem.setFr_id(jsonObject.getInt("foreid"));
+                            forumReplyItem.setAuthor(jsonObject.getString("author"));
+                            forumReplyItem.setTime(stampToDate(jsonObject.getString("time")));
+                            forumReplyItem.setContent(jsonObject.getString("content"));
+                            forumReplyItems.add(forumReplyItem);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return forumReplyItems;
+    }
+
+    public static List<forum> getForumItem(Integer page) {
         JSONObject[] jsonObjects = getJsonObjects(executeGetForum());
         List<forum> forumItems = new ArrayList<>();
         try {
@@ -103,21 +168,11 @@ public class ForumItemService extends NetService{
         return forumItems;
     }
 
-    private static String stampToDate(String s){
-        String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-        long lt = Long.valueOf(s);
-        Date date = new Date(lt);
-        res = simpleDateFormat.format(date);
-        return res;
-    }
-
     // 将输入流转化为 String 型
     private static String parseInfo(InputStream inStream) throws Exception {
         byte[] data = read(inStream);
         // 转化为字符串
         return new String(data, "UTF-8");
     }
-
 
 }

@@ -26,6 +26,7 @@ public abstract class OnItemTouchListener implements RecyclerView.OnItemTouchLis
         mGestureDetectorCompat.onTouchEvent(e);
     }
 
+
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
         mGestureDetectorCompat.onTouchEvent(e);
@@ -47,17 +48,9 @@ public abstract class OnItemTouchListener implements RecyclerView.OnItemTouchLis
                 RecyclerView.ViewHolder VH = mRecyclerView.getChildViewHolder(childe);
                 onItemClick(VH);
             }
-            return true;
+            return false;
         }
 
-        @Override
-        public void onLongPress(MotionEvent e) {
-            View childe = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
-            if (childe != null) {
-                RecyclerView.ViewHolder VH = mRecyclerView.getChildViewHolder(childe);
-                onItemClick(VH);
-            }
-        }
     }
 }
 

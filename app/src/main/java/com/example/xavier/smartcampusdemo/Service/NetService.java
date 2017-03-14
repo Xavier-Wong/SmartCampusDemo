@@ -1,17 +1,15 @@
 package com.example.xavier.smartcampusdemo.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.example.xavier.smartcampusdemo.Util.NetUtil.NetUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
-import com.example.xavier.smartcampusdemo.Util.NetUtil.NetUtil;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 /**
  * Created by Xavier on 11/12/2016.
+ *
  */
 
 /**
@@ -19,10 +17,11 @@ import com.example.xavier.smartcampusdemo.Util.NetUtil.NetUtil;
  * @author linpeng123l
  *
  */
-class NetService {
+public class NetService {
 
-    static String getIP() {
-        return "138.197.201.173:8080";
+    public static String getIP() {
+        return "192.168.2.174:8080";
+//        return "xavier-hzw.me:8080";
     }
 
     public final static  String UESRAGENT_PHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A405 Safari/8536.25";

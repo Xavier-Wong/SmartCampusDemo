@@ -56,7 +56,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void run() {
             info = WebService.executeSignUp(username.getText().toString(), password.getText().toString(), sid.getText().toString(), tel.getText().toString());
-            // info = WebServicePost.executeHttpPost(username.getText().toString(), password.getText().toString());
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -64,6 +63,7 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                         Toast toast = Toast.makeText(SignUpActivity.this, "注册成功", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.BOTTOM, 0, 0);
                         toast.show();
+                        finish();
                     }
                     else if(info.equals("注册失败")) {
                         Toast toast = Toast.makeText(SignUpActivity.this, "注册失败", Toast.LENGTH_SHORT);

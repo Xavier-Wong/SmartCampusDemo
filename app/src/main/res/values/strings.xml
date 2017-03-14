@@ -18,4 +18,5 @@
     <string name="close">关闭</string>
     <string name="isLoading">正在加载</string>
     <string name="forums_details">论坛</string>
+    <string name="divider">divider</string>
 </resources>

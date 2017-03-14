@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Activity.ForumsDetailsActivity" >
 
     <android.support.design.widget.AppBarLayout
@@ -20,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
+        android:background="@color/white"
         android:visibility="visible"
         android:gravity="center">
 
@@ -39,55 +41,10 @@
             />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/forums_details"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/techForumDetails_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="@color/white"
-        android:visibility="invisible">
-
-
-        <ScrollView
-            android:id="@+id/detail_author_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <FrameLayout
-                android:id="@+id/detail_author_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/detail_author_avatar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="avatar"
-                    android:layout_gravity="start|center_vertical"/>
-
-                <TextView
-                    android:id="@+id/detail_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"/>
-
-
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="36dp"
-                android:layout_marginStart="36dp"
-                android:textColor="@color/black"
-                android:layout_marginTop="29dp"
-                android:id="@+id/textView" />
-        </ScrollView>
-    </RelativeLayout>
+        android:layout_height="match_parent"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

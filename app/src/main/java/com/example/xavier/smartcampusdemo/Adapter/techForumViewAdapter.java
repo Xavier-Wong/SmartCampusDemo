@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,8 +28,10 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int TYPE_FOOTER = 1;  //说明是带有Footer的
     private static final int TYPE_NORMAL = 2;  //说明是不带有header和footer的
 
+    private int HEADER_INSERT = 0, FOOTER_INSERT = 0;
     private View mHeaderView,mFooterView;
     private List<forum> forumItems;
+    private RecyclerView mRecyclerView;
     private Context context;
 
     public techForumViewAdapter(Context context, List<forum> forumItem) {
@@ -50,6 +53,10 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         return forumItems;
     }
 
+    public void removeAll() {
+        forumItems.clear();
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         if(mHeaderView == null && mFooterView == null){
@@ -69,6 +76,7 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
     public void setHeaderView(View headerView) {
         mHeaderView = headerView;
+        HEADER_INSERT = 1;
         notifyItemInserted(0);
     }
     public View getFooterView() {
@@ -76,18 +84,16 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
     public void setFooterView(View footerView) {
         mFooterView = footerView;
+        FOOTER_INSERT = 1;
         notifyItemInserted(getItemCount()-1);
     }
 
+
     @Override
     public int getItemViewType(int position) {
-        if (mHeaderView == null && mFooterView == null){
+        if (HEADER_INSERT == 0 && FOOTER_INSERT == 0){
             return TYPE_NORMAL;
         }
-//        if (position == 0){
-//            //第一个item应该加载Header
-//            return TYPE_HEADER;
-//        }
         if (position == getItemCount()-1){
             //最后一个,应该加载Footer
             return TYPE_FOOTER;
@@ -97,13 +103,10 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public forumItemHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        if(mHeaderView != null && viewType == TYPE_HEADER) {
-            return new forumItemHolder(mHeaderView);
-        }
         if(mFooterView != null && viewType == TYPE_FOOTER){
             return new forumItemHolder(mFooterView);
         }
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.lv_techforum_item, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.techforum_item_normal, viewGroup, false);
         return new forumItemHolder(v);
     }
 
@@ -131,8 +134,10 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         forumTime.setText(forumItem.getTime());
     }
 
-    private class forumItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class forumItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        float x;
+        float y;
         private TextView forumItemTitle;
         private TextView forumItemAuthor;
         private TextView forumItemTime;
@@ -145,9 +150,9 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
             if (itemView == mFooterView){
                 return;
             }
-            forumItemTitle = (TextView) itemView.findViewById(R.id.fragment_forumitems_listview_title);
-            forumItemAuthor = (TextView) itemView.findViewById(R.id.fragment_forumitems_listview_source);
-            forumItemTime = (TextView) itemView.findViewById(R.id.fragment_forumitems_listview_time);
+            forumItemTitle = (TextView) itemView.findViewById(R.id.fragment_forumitems_title);
+            forumItemAuthor = (TextView) itemView.findViewById(R.id.fragment_forumitems_author);
+            forumItemTime = (TextView) itemView.findViewById(R.id.fragment_forumitems_time);
             itemView.findViewById(R.id.forum_item_container).setOnClickListener(this);
         }
 
@@ -155,9 +160,13 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.forum_item_container:
-                    break;
+                        Intent intent = new Intent(context, ForumsDetailsActivity.class);
+                        intent.putExtra("url", String.valueOf(getForumItems().get(getAdapterPosition()).getF_id()));
+                        context.startActivity(intent);
             }
+
         }
+
     }
 
 }

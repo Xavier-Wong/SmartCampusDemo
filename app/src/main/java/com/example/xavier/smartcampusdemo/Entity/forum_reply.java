@@ -10,7 +10,7 @@ import java.util.Date;
 public class forum_reply{
     private int f_id;
     private int fr_id;
-    private Date time;
+    private String time;
     private String author;
     private String content;
     private String title;
@@ -26,10 +26,10 @@ public class forum_reply{
     public int getFr_id(){
         return fr_id;
     }
-    public void setTime(Date time){
+    public void setTime(String time){
         this.time=time;
     }
-    public Date getTime(){
+    public String getTime(){
         return time;
     }
     public void setAuthor(String author){
@@ -43,11 +43,5 @@ public class forum_reply{
     }
     public String getContent(){
         return content;
-    }
-    public void setTitle(String title){
-        this.title=title;
-    }
-    public String getTitle(){
-        return title;
     }
 }

@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -19,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.xavier.smartcampusdemo.Fragment.techForum;
 import com.example.xavier.smartcampusdemo.R;
 import com.example.xavier.smartcampusdemo.Service.WebService;
 
@@ -31,31 +30,26 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private String info;
     private EditText username, password;
-    private Button clear_username, show_password;
+    private Button clear_username, show_password, sign_in;
     private TextView sign_up;
     private TextWatcher username_watcher, password_watcher;
     private static Handler handler = new Handler();
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_main);
+        setContentView(R.layout.signin_main);
 
-        /*EditText Initiate*/
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
-
-        /*Button Initiate*/
         clear_username = (Button) findViewById(R.id.bt_clear_username);
-//        clear_password = (Button) findViewById(R.id.bt_pwd_clear);
         show_password = (Button) findViewById(R.id.bt_show_password);
-        Button sign_in = (Button) findViewById(R.id.bt_sign_in);
-
+        sign_in = (Button) findViewById(R.id.bt_sign_in);
         sign_up = (TextView) findViewById(R.id.sign_up);
 
         /*SetListener*/
         clear_username.setOnClickListener(this);
-//        clear_password.setOnClickListener(this);
         show_password.setOnTouchListener(this);
         sign_in.setOnClickListener(this);
         sign_up.setOnClickListener(this);
@@ -82,11 +76,9 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         password_watcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if(s.toString().length()>0) {
-//                    clear_password.setVisibility(View.VISIBLE);
                     show_password.setVisibility(View.VISIBLE);
                 }
                 else {
-//                    clear_password.setVisibility(View.INVISIBLE);
                     show_password.setVisibility(View.INVISIBLE);
                 }
             }
@@ -99,12 +91,12 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.bt_sign_in:
-//            // 提示框
-//            dialog = new ProgressDialog(this);
-//            dialog.setTitle("提示");
-//            dialog.setMessage("正在登陆，请稍后...");
-//            dialog.setCancelable(false);
-//            dialog.show();
+                // 提示框
+                dialog = new ProgressDialog(this);
+                dialog.setTitle("提示");
+                dialog.setMessage("正在登陆，请稍后...");
+                dialog.setCancelable(false);
+                dialog.show();
                 // 创建子线程，分别进行Get和Post传输
                 new Thread(new MyThread()).start();
                 break;
@@ -115,9 +107,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             case R.id.sign_up:
                 SignUpActivity.actionStart(SignInActivity.this);
                 break;
-//            case R.id.bt_pwd_clear:
-//                password.setText("");
-//                break;
         }
     }
 
@@ -130,19 +119,22 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void run() {
                     if(info.equals("登录成功")) {
-                        SharedPreferences sharedPreferences = getSharedPreferences("usrName", Context.MODE_PRIVATE);
+                        SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("username", username.getText().toString());
+                        editor.putString("userName", username.getText().toString());
                         editor.apply();
                         Toast toast = Toast.makeText(SignInActivity.this, "登陆成功", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.BOTTOM, 0, 0);
                         toast.show();
+                        dialog.dismiss();
                         onlyActivity(MainActivity.class);
+                        techForum.refresh();
                     }
                     else if(info.equals("登录失败")) {
                         Toast toast = Toast.makeText(SignInActivity.this, "用户名或者密码错误，请重新输入", Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.BOTTOM, 0, 0);
                         toast.show();
+                        dialog.dismiss();
                     }
 
                 }

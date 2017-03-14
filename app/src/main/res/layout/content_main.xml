@@ -19,7 +19,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/cornflowerblue"
         app:tabMode="scrollable"
         />
 
@@ -27,7 +27,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow"
+        android:background="@color/white"
         />
 
 
