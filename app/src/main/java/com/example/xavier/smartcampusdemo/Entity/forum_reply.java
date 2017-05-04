@@ -12,8 +12,9 @@ public class forum_reply{
     private int fr_id;
     private String time;
     private String author;
+    private int u_id;
     private String content;
-    private String title;
+    private String avatar;
     public void setF_id(int f_id){
         this.f_id=f_id;
     }
@@ -32,16 +33,28 @@ public class forum_reply{
     public String getTime(){
         return time;
     }
+    public void setU_id(int u_id){
+        this.u_id = u_id;
+    }
     public void setAuthor(String author){
         this.author=author;
     }
     public String getAuthor(){
         return author;
     }
+    public int getU_id(){
+        return u_id;
+    }
     public void setContent(String content){
         this.content=content;
     }
     public String getContent(){
         return content;
+    }
+    public void setAvatar(String avatar){
+        this.avatar=avatar;
+    }
+    public String getAvatar(){
+        return avatar;
     }
 }

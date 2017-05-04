@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Activity.VideoDetailsActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/video_details_toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:fitsSystemWindows="true"-->
+        <!--android:background="@drawable/forums_reply_toolbar">-->
+
+    <!--</android.support.v7.widget.Toolbar>-->
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/videos_details_is_loading"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@color/white"-->
+        <!--android:visibility="visible"-->
+        <!--android:gravity="center">-->
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/videos_details_progress_bar"-->
+            <!--style="@android:style/Widget.ProgressBar.Small"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_toRightOf="@+id/videos_details_progress_bar"-->
+            <!--android:layout_toEndOf="@+id/videos_details_progress_bar"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/isLoading"-->
+            <!--android:textColor="#434343"-->
+            <!--android:textSize="14sp"-->
+            <!--/>-->
+    <!--</RelativeLayout>-->
+
+    <RelativeLayout
+        android:id="@+id/video_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+    </RelativeLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/video_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gainsboro"
+        app:tabTextColor="@color/BLOG_ITEM_CONTENT"
+        android:alpha="0.3"
+        app:tabMode="scrollable">
+
+    </android.support.design.widget.TabLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/video_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/videoShareDetails_rv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+
+</LinearLayout>

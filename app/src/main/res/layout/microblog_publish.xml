@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:background="@color/white"
+    tools:context=".Activity.BlogPublishActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/blog_publish_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:background="@color/white"
+        app:navigationIcon="@drawable/ic_close_black_30dp">
+        <!--<ImageView-->
+        <!--android:layout_marginLeft="17dp"-->
+        <!--android:layout_marginStart="17dp"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_close_black_24dp"/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:text="@string/publish_title"
+            android:textSize="23sp"/>
+        <TextView
+            android:id="@+id/blog_publish_commit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/publish_confirm"
+            android:textColor="@color/gainsboro"
+            android:textSize="18sp"
+            android:layout_marginRight="17dp"
+            android:layout_marginEnd="17dp"
+            android:clickable="true"/>
+    </android.support.v7.widget.Toolbar>
+
+
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/blog_publish_toolbar"
+        android:paddingBottom="14dp"
+        android:src="@drawable/divider"/>
+
+    <EditText
+        android:id="@+id/blog_publish_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp"
+        android:layout_below="@id/divider"
+        android:maxLines="16"
+        android:scrollbars="vertical"
+        android:enabled="true"
+        android:background="@null"
+        android:inputType="textMultiLine"
+        android:minLines="14"
+        android:textColor="@color/black"
+        android:hint="输入内容"
+        android:textColorHint="@color/gainsboro"
+        android:gravity="top"/>
+
+
+    <LinearLayout
+        android:id="@+id/blog_publish_photo_thumbnails"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_height="150dp">
+        <ImageView
+            android:id="@+id/blog_publish_photo_thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:src="@drawable/ic_control_point_black_80dp"
+            android:background="@drawable/choosing_img_frame"
+            android:contentDescription="" />
+        <ImageView
+            android:id="@+id/blog_publish_photo_thumbnail1"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:background="@drawable/choosing_img_frame"
+            android:contentDescription="" />
+        <ImageView
+            android:id="@+id/blog_publish_photo_thumbnail2"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:background="@drawable/choosing_img_frame"
+            android:contentDescription="" />
+
+
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/divider"
+        android:layout_above="@id/blog_publish_photo_thumbnails"/>
+    <!--<Button-->
+    <!--android:id="@+id/forum_publish_commit"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+</RelativeLayout>

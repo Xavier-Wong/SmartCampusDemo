@@ -9,17 +9,21 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.xavier.smartcampusdemo.Fragment.techForum;
 import com.example.xavier.smartcampusdemo.R;
+import com.example.xavier.smartcampusdemo.Service.UserInfoService;
 import com.example.xavier.smartcampusdemo.Service.WebService;
+import com.example.xavier.smartcampusdemo.Util.JSONUtil;
+import com.example.xavier.smartcampusdemo.Util.UIUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Xavier on 11/7/2016.
@@ -29,22 +33,28 @@ import com.example.xavier.smartcampusdemo.Service.WebService;
 public class SignInActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
 
     private String info;
-    private EditText username, password;
-    private Button clear_username, show_password, sign_in;
-    private TextView sign_up;
+
+    private EditText usrName, usrPwd;
+    private Button clear_username;
+    private Button show_password;
+
+    Button sign_in;
+    TextView sign_up;
     private TextWatcher username_watcher, password_watcher;
-    private static Handler handler = new Handler();
     private ProgressDialog dialog;
+
+    Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.signin_main);
+        setContentView(R.layout.main_sign_in);
 
-        username = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
+        usrName = (EditText) findViewById(R.id.username);
+        usrPwd = (EditText) findViewById(R.id.password);
         clear_username = (Button) findViewById(R.id.bt_clear_username);
         show_password = (Button) findViewById(R.id.bt_show_password);
+
         sign_in = (Button) findViewById(R.id.bt_sign_in);
         sign_up = (TextView) findViewById(R.id.sign_up);
 
@@ -55,8 +65,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         sign_up.setOnClickListener(this);
 
         initWatcher();
-        username.addTextChangedListener(username_watcher);
-        password.addTextChangedListener(password_watcher);
+        usrName.addTextChangedListener(username_watcher);
+        usrPwd.addTextChangedListener(password_watcher);
 
     }
 
@@ -93,7 +103,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
             case R.id.bt_sign_in:
                 // 提示框
                 dialog = new ProgressDialog(this);
-                dialog.setTitle("提示");
                 dialog.setMessage("正在登陆，请稍后...");
                 dialog.setCancelable(false);
                 dialog.show();
@@ -101,8 +110,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 new Thread(new MyThread()).start();
                 break;
             case R.id.bt_clear_username:
-                username.setText("");
-                password.setText("");
+                usrName.setText("");
+                usrPwd.setText("");
                 break;
             case R.id.sign_up:
                 SignUpActivity.actionStart(SignInActivity.this);
@@ -110,33 +119,45 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public class MyThread implements Runnable {
+    private class MyThread implements Runnable {
         @Override
         public void run() {
-            info = WebService.executeSignIn(username.getText().toString(), password.getText().toString());
-            // info = WebServicePost.executeHttpPost(username.getText().toString(), password.getText().toString());
+            info = WebService.executeSignIn(usrName.getText().toString(), usrPwd.getText().toString());
+            Log.d("checkcheck",usrName.getText().toString());
+            final JSONObject userInfo = JSONUtil.getJsonObject(UserInfoService.getUserByName(usrName.getText().toString()));
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(info.equals("登录成功")) {
-                        SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("userName", username.getText().toString());
-                        editor.apply();
-                        Toast toast = Toast.makeText(SignInActivity.this, "登陆成功", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.BOTTOM, 0, 0);
-                        toast.show();
-                        dialog.dismiss();
-                        onlyActivity(MainActivity.class);
-                        techForum.refresh();
+                    switch (info) {
+                        case "noResponse": {
+                            dialog.dismiss();
+                            UIUtils.customBottomShortToast(SignInActivity.this, "服务器未响应，请稍后再试", 0, 100);
+                            break;
+                        }
+                        case "": {
+                            UIUtils.customBottomShortToast(SignInActivity.this, "用户名或密码错误，请重新输入", 0, 100);
+                            dialog.dismiss();
+                            break;
+                        }
+                        default: {
+                            SharedPreferences sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userName", usrName.getText().toString());
+                            editor.putString("userAvatar", info);
+                            Log.d("checkcheck",info);
+                            try {
+                                assert userInfo != null;
+                                editor.putString("userID", userInfo.getString("u_id"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            editor.apply();
+                            dialog.dismiss();
+                            UIUtils.customBottomShortToast(SignInActivity.this, "登陆成功", 0, 100);
+                            onlyActivity(MainActivity.class);
+                            break;
+                        }
                     }
-                    else if(info.equals("登录失败")) {
-                        Toast toast = Toast.makeText(SignInActivity.this, "用户名或者密码错误，请重新输入", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.BOTTOM, 0, 0);
-                        toast.show();
-                        dialog.dismiss();
-                    }
-
                 }
             });
         }
@@ -146,17 +167,16 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
             show_password.setBackgroundResource(R.drawable.ic_password_show);
-            password.setInputType(InputType.TYPE_CLASS_TEXT);
-            password.setSelection(password.getText().toString().length());
+            usrPwd.setInputType(InputType.TYPE_CLASS_TEXT);
+            usrPwd.setSelection(usrPwd.getText().toString().length());
         }
         if(motionEvent.getAction()==MotionEvent.ACTION_UP){
             show_password.setBackgroundResource(R.drawable.ic_password_show);
-            password.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            password.setSelection(password.getText().toString().length());
+            usrPwd.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            usrPwd.setSelection(usrPwd.getText().toString().length());
         }
         return false;
     }
-
 
     public static void actionStart(Context context) {
         Intent intent = new Intent(context, SignInActivity.class);

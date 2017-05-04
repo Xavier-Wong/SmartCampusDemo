@@ -19,4 +19,27 @@
     <string name="isLoading">正在加载</string>
     <string name="forums_details">论坛</string>
     <string name="divider">divider</string>
+    <string name="reply_tag">回复</string>
+    <string name="commit_tag">发送</string>
+    <string name="reply_input">请输入回复内容</string>
+    <string name="zero">0</string>
+    <string name="like">like</string>
+    <string name="dislike">dislike</string>
+    <string name="philosophy">哲学</string>
+    <string name="economics">经济学</string>
+    <string name="jurisprudence">法学</string>
+    <string name="pedagogy">教育学</string>
+    <string name="literature">文学</string>
+    <string name="history">历史学</string>
+    <string name="science">理学</string>
+    <string name="engineering">工学</string>
+    <string name="medicine">医学</string>
+    <string name="military_science">军事学</string>
+    <string name="management_science">管理学</string>
+    <string name="agriculture">农学</string>
+    <string name="click_retry">点击重试</string>
+    <string name="publish_title">发表论坛</string>
+    <string name="publish_confirm">发表</string>
+    <string name="uemail">邮箱</string>
+    <string name="error_info_fetch">获取数据错误，下拉刷新重试</string>
 </resources>

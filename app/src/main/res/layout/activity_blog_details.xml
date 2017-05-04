@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#F1F1F1"
+    android:id="@+id/blog_details_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".Activity.BlogDetailsActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/blog_details_toolbar"
+        android:background="#FEFEFE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#333333"
+            android:text="微博内容"/>
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_below="@id/blog_details_toolbar"
+        android:orientation="vertical"
+        android:id="@+id/blog_details_info"
+        android:background="#FEFEFE"
+        android:layout_marginTop="10dp"
+        android:paddingTop="12dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.facebook.drawee.view.SimpleDraweeView
+                fresco:roundAsCircle="true"
+                android:id="@+id/blog_details_avatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/default_avatar"/>
+            <LinearLayout
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/blog_details_author"
+                    android:layout_weight="1.0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="#F46200"
+                    android:text=""/>
+                <TextView
+                    android:id="@+id/blog_details_time"
+                    android:layout_weight="1.0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:gravity="center_vertical"
+                    android:textSize="12sp"
+                    android:textColor="@color/gainsboro"
+                    android:text=""/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/blog_details_content"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="#333333"
+            android:text=""/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_weight="1.0"
+                android:scaleType="centerCrop"
+                android:id="@+id/blog_details_img1"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:contentDescription="" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/blog_details_img2"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1.0"
+                android:contentDescription=""
+                android:scaleType="centerCrop" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_weight="1.0"
+                android:scaleType="centerCrop"
+                android:id="@+id/blog_details_img3"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:contentDescription="" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@id/blog_details_info"
+        android:id="@+id/blog_details_count"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:background="#FEFEFE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
+        <RelativeLayout
+            android:layout_weight="1.0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/blog_details_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#F46200"
+                android:text="回复"/>
+            <TextView
+                android:id="@+id/blog_details_comment_count"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/blog_details_comment"
+                android:layout_toEndOf="@id/blog_details_comment"
+                android:textSize="20sp"
+                android:textColor="#333333"
+                android:text=""/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="1.0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/blog_details_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#F46200"
+                android:text="赞"/>
+            <TextView
+                android:id="@+id/blog_details_like_count"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/blog_details_like"
+                android:layout_toEndOf="@id/blog_details_like"
+                android:textSize="20sp"
+                android:textColor="#333333"
+                android:text="" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/blog_reply_refresh"
+        android:layout_below="@id/blog_details_count"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/blog_reply_rv"
+            android:background="#FEFEFE"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/blog_details_loading"
+        android:layout_marginTop="10dp"
+        android:background="#FEFEFE"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\view_actionsheet.xml",
+        "source": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\bundles\\debug\\res\\layout\\view_actionsheet.xml"
+    },
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\view_alertdialog.xml",
+        "source": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\bundles\\debug\\res\\layout\\view_alertdialog.xml"
+    },
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_main.xml",
+        "source": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_main.xml"
+    }
+]

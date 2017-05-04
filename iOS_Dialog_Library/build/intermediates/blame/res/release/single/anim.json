@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\res\\merged\\release\\anim\\actionsheet_dialog_in.xml",
+        "source": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\anim\\actionsheet_dialog_in.xml"
+    },
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\res\\merged\\release\\anim\\actionsheet_dialog_out.xml",
+        "source": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\anim\\actionsheet_dialog_out.xml"
+    }
+]

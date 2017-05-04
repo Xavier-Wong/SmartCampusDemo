@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/forum_wtpic_container"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:paddingTop="17dp"
+    android:paddingLeft="17dp"
+    android:paddingRight="17dp"
+    android:clickable="true"
+    android:background="@drawable/select_item_style1">
+
+    <FrameLayout
+        android:id="@+id/forum_wtpic_pic_holder"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/forum_wtpic_pic"
+            android:scaleType="centerCrop"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:contentDescription="" />
+
+        <ImageView
+            android:id="@+id/forum_wtpic_pic_tag"
+            android:layout_gravity="start|bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:src="@drawable/tag_gif"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/forum_wtpic_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/forum_wtpic_pic_holder"
+        android:layout_toStartOf="@id/forum_wtpic_pic_holder"
+        android:maxLines="2"
+        android:textColor="#313233"
+        android:textSize="18sp"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/forum_wtpic_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:textColor="#7A7C80"
+        android:textSize="12sp"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/forum_wtpic_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/forum_wtpic_author"
+        android:layout_toEndOf="@id/forum_wtpic_author"
+        android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp"
+        android:textColor="#7A7C80"
+        android:textSize="12sp"
+        android:text=""/>
+
+    <TextView
+        android:id="@+id/forum_wtpic_replycount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/forum_wtpic_time"
+        android:layout_toEndOf="@id/forum_wtpic_time"
+        android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp"
+        android:textColor="#7A7C80"
+        android:textSize="12sp"
+        android:text="-"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/divider"
+        android:contentDescription="@string/divider" />
+</RelativeLayout>

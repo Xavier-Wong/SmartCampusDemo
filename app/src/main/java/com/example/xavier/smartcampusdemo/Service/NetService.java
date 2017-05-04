@@ -20,13 +20,12 @@ import java.io.InputStream;
 public class NetService {
 
     public static String getIP() {
-        return "192.168.2.174:8080";
+        return "192.168.1.214:8080";
+//        return "10.0.2.2:8080";
 //        return "xavier-hzw.me:8080";
     }
 
-    public final static  String UESRAGENT_PHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A405 Safari/8536.25";
-
-    /**
+    /*
      * 通过URL请求得到json数组
      * @param url
      * @return
@@ -46,7 +45,7 @@ public class NetService {
         return null;
     }
 
-    static byte[] read(InputStream inStream) throws Exception {
+    private static byte[] read(InputStream inStream) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int len = 0;
@@ -55,5 +54,12 @@ public class NetService {
         }
         inStream.close();
         return outputStream.toByteArray();
+    }
+
+    // 将输入流转化为 String 型
+    static String parseInfo(InputStream inStream) throws Exception {
+        byte[] data = read(inStream);
+        // 转化为字符串
+        return new String(data, "UTF-8");
     }
 }

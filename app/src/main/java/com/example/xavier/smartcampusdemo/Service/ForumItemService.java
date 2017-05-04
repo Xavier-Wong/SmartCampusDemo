@@ -1,27 +1,16 @@
 package com.example.xavier.smartcampusdemo.Service;
 
-import android.support.annotation.Nullable;
-
 import com.example.xavier.smartcampusdemo.Entity.forum;
 import com.example.xavier.smartcampusdemo.Entity.forum_reply;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
 
 import static com.example.xavier.smartcampusdemo.Util.JSONUtil.getJsonObjects;
 import static com.example.xavier.smartcampusdemo.Util.TimeConvertor.stampToDate;
@@ -33,26 +22,27 @@ import static com.example.xavier.smartcampusdemo.Util.TimeConvertor.stampToDate;
 
 public class ForumItemService extends NetService{
 
-    private static String httpConnect(int action, String id) {
+    private static StringBuffer httpConnect(int action, String id, String type, String page) {
 
-        String temp = "";
+        StringBuffer temp;
         InputStream is = null;
         HttpURLConnection conn = null;
 
         try {
             // URL 地址
-            String path = "http://" + getIP() + "/HelloWeb/ForumLet?action=" + action + "&fid=" + id;
+            String path = "http://" + getIP() + "/HelloWeb/ForumLet?action=" + action + "&fid=" + id + "&type=" + type + "&page=" + page;
 
             conn = (HttpURLConnection) new URL(path).openConnection();
-            conn.setConnectTimeout(3000); // 设置超时时间
-            conn.setReadTimeout(3000);
+            conn.setConnectTimeout(5000); // 设置超时时间
+            conn.setReadTimeout(5000);
             conn.setDoInput(true);
             conn.setRequestMethod("GET"); // 设置获取信息方式
             conn.setRequestProperty("Charset", "UTF-8"); // 设置接收数据编码格式
 
             if (conn.getResponseCode() == 200) {
                 is = conn.getInputStream();
-                temp = parseInfo(is).replace("<br>","");
+                temp = new StringBuffer(parseInfo(is).replace("<br>", ""));
+                return temp;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,27 +60,33 @@ public class ForumItemService extends NetService{
             }
 
         }
+        return new StringBuffer("noResponse");
+    }
+
+    public static StringBuffer getForumsDetails(String id) {
+
+        StringBuffer temp;
+        temp = httpConnect(2, id, "", "");
+        if (temp.toString().equals("invalid"))
+            return new StringBuffer("{}");
         return temp;
     }
 
-    public static String getForumsDetails(String id) {
+    private static StringBuffer executeGetForumByTypeAndPage(String type, String page) {
 
-        String temp = "";
-        temp = httpConnect(2, id);
+        StringBuffer temp;
+        temp = httpConnect(1, "", type, page);
+        if (temp.toString().equals("invalid"))
+            return new StringBuffer("[]");
         return temp;
     }
 
-    public static String executeGetForum() {
+    private static StringBuffer executeGetForumReplyByIdAndPage(String id, String page) {
 
-        String temp = "";
-        temp = httpConnect(1, "");
-        return temp;
-    }
-
-    public static String executeGetForumReply(String id) {
-
-        String temp = "";
-        temp = httpConnect(3, id);
+        StringBuffer temp;
+        temp = httpConnect(3, id, "", page);
+        if (temp.toString().equals("invalid"))
+            return new StringBuffer("[]");
         return temp;
     }
 
@@ -120,59 +116,65 @@ public class ForumItemService extends NetService{
 //        }
 //    }
 
-    public static List<forum_reply> getForumItemReply(Integer page, String id) {
+    public static List<forum_reply> getForumReplyItems(Integer page, String id) {
         List<forum_reply> forumReplyItems = new ArrayList<>();
-        if(!executeGetForumReply(id).equals("invalid")) {
-            JSONObject[] jsonObjects = getJsonObjects(executeGetForumReply(id));
+        if(!executeGetForumReplyByIdAndPage(id, String.valueOf(page)).toString().equals("noResponse")) {
+            JSONObject[] jsonObjects = getJsonObjects(executeGetForumReplyByIdAndPage(id, String.valueOf(page)).toString());
             try {
                 if (jsonObjects != null && jsonObjects.length > 0) {
                     for (JSONObject jsonObject : jsonObjects) {
-                        if (Integer.parseInt(jsonObject.getString("page")) == page) {
-                            forum_reply forumReplyItem = new forum_reply();
-                            forumReplyItem.setF_id(jsonObject.getInt("foid"));
-                            forumReplyItem.setFr_id(jsonObject.getInt("foreid"));
-                            forumReplyItem.setAuthor(jsonObject.getString("author"));
-                            forumReplyItem.setTime(stampToDate(jsonObject.getString("time")));
-                            forumReplyItem.setContent(jsonObject.getString("content"));
-                            forumReplyItems.add(forumReplyItem);
-                        }
+                        forum_reply forumReplyItem = new forum_reply();
+                        forumReplyItem.setF_id(jsonObject.getInt("f_id"));
+                        forumReplyItem.setFr_id(jsonObject.getInt("fr_id"));
+                        forumReplyItem.setU_id(jsonObject.getInt("u_id"));
+                        forumReplyItem.setTime(stampToDate(jsonObject.getString("time")));
+                        forumReplyItem.setContent(jsonObject.getString("content"));
+                        forumReplyItem.setAuthor(jsonObject.getString("author"));
+                        forumReplyItem.setAvatar(jsonObject.getString("avatar"));
+                        forumReplyItems.add(forumReplyItem);
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        else {
+            forum_reply forumReplyItem = new forum_reply();
+            forumReplyItem.setU_id(0);
+            forumReplyItems.add(forumReplyItem);
+        }
         return forumReplyItems;
     }
 
-    public static List<forum> getForumItem(Integer page) {
-        JSONObject[] jsonObjects = getJsonObjects(executeGetForum());
+    public static List<forum> getForumItems(Integer page, Integer type) {
         List<forum> forumItems = new ArrayList<>();
-        try {
-            if(jsonObjects!=null&&jsonObjects.length>0) {
-                for(JSONObject jsonObject : jsonObjects) {
-                    if(Integer.parseInt(jsonObject.getString("page"))==page) {
+        if(!executeGetForumByTypeAndPage(String.valueOf(type), String.valueOf(page)).toString().equals("noResponse")) {
+            JSONObject[] jsonObjects = getJsonObjects(executeGetForumByTypeAndPage(String.valueOf(type), String.valueOf(page)).toString());
+            try {
+                if (jsonObjects != null && jsonObjects.length > 0) {
+                    for (JSONObject jsonObject : jsonObjects) {
                         forum forumItem = new forum();
-                        forumItem.setF_id(jsonObject.getInt("id"));
+                        forumItem.setF_id(jsonObject.getInt("f_id"));
                         forumItem.setTitle(jsonObject.getString("title"));
-                        forumItem.setAuthor(jsonObject.getString("author"));
+                        forumItem.setU_id(jsonObject.getInt("u_id"));
                         forumItem.setTime(stampToDate(jsonObject.getString("time")));
+                        forumItem.setAuthor(jsonObject.getString("author"));
                         forumItem.setType(jsonObject.getInt("type"));
+                        forumItem.setImg(jsonObject.getString("img"));
+                        forumItem.setReply_count(jsonObject.getInt("reply_count"));
                         forumItems.add(forumItem);
                     }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }catch(Exception e) {
-            e.printStackTrace();
+        }
+        else {
+            forum forumItem = new forum();
+            forumItem.setU_id(0);
+            forumItems.add(forumItem);
         }
         return forumItems;
-    }
-
-    // 将输入流转化为 String 型
-    private static String parseInfo(InputStream inStream) throws Exception {
-        byte[] data = read(inStream);
-        // 转化为字符串
-        return new String(data, "UTF-8");
     }
 
 }

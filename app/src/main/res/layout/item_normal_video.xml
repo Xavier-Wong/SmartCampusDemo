@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="3dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="3dp"
+    app:cardCornerRadius="5dp"
+    app:elevation="1dp">
+
+    <LinearLayout
+        android:id="@+id/base_video_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/base_video_item_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/base_video_item_icon"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@color/actionsheet_gray"
+                android:contentDescription="@string/app_name" />
+
+            <FrameLayout
+                android:layout_gravity="bottom"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/video_view_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_slideshow_black_retangle"
+                    android:drawableStart="@drawable/ic_slideshow_black_retangle"
+                    android:textColor="@color/white"
+                    android:layout_gravity="start"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/video_comment_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_subtitles_black_24dp"
+                    android:drawableStart="@drawable/ic_subtitles_black_24dp"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/video_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_gravity="end|center_vertical"/>
+            </FrameLayout>
+
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/base_video_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:lines="2"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/base_video_item_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/lightgray"
+            android:textSize="15sp"
+            android:text="" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

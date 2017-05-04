@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\library\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\Xavier\\.android\\build-cache\\920f88cdc680949b71c962880a9ccf60aa659a50\\output\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\library\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\Xavier\\.android\\build-cache\\920f88cdc680949b71c962880a9ccf60aa659a50\\output\\res\\layout-v21\\notification_action.xml"
+    },
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\library\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\Xavier\\.android\\build-cache\\920f88cdc680949b71c962880a9ccf60aa659a50\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "D:\\AndroidProject\\SmartCampusDemo\\library\\build\\intermediates\\res\\merged\\release\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\Xavier\\.android\\build-cache\\920f88cdc680949b71c962880a9ccf60aa659a50\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+    }
+]

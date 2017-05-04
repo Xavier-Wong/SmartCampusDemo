@@ -1,10 +1,13 @@
 package com.example.xavier.smartcampusdemo.Service;
 
+import com.example.xavier.smartcampusdemo.Entity.user;
+
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 
 /**
  * Created by Xavier on 11/21/2016.
@@ -17,68 +20,76 @@ public class WebService extends NetService{
     public static String executeSignIn(String username, String password) {
 
         HttpURLConnection conn = null;
-        InputStream is = null;
-
+        String out;
+        Properties properties = System.getProperties();
+        properties.list(System.out);
         try {
             // 用户名 密码
             // URL 地址
             String path = "http://" + getIP() + "/HelloWeb/LogLet";
-            path = path + "?username=" + username + "&password=" + password;
 
             conn = (HttpURLConnection) new URL(path).openConnection();
-            conn.setConnectTimeout(3000); // 设置超时时间
             conn.setReadTimeout(3000);
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
             conn.setDoInput(true);
-            conn.setRequestMethod("GET"); // 设置获取信息方式
-            conn.setRequestProperty("Charset", "UTF-8"); // 设置接收数据编码格式
-
-            if (conn.getResponseCode() == 200) {
-                is = conn.getInputStream();
-                return parseInfo(is);
+            PrintWriter printWriter = new PrintWriter(conn.getOutputStream());
+            String post = "username="+username+"&password="+password;
+            printWriter.write(post);
+            printWriter.flush();
+            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            int len;
+            byte[] arr = new byte[1024];
+            while ((len=bis.read(arr))!= -1) {
+                bos.write(arr,0,len);
+                bos.flush();
             }
-
-        }catch (Exception e) {
+            out = new String(bos.toByteArray(), "utf-8");
+            bos.close();
+            return out;
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             // 意外退出时进行连接关闭保护
             if (conn != null) {
                 conn.disconnect();
             }
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
 
         }
-        return null;
+        return "noResponse";
     }
 
-    public static String executeSignUp(String username, String password, String sid, String tel) {
+    public static String executeSignUp(user user) {
 
         HttpURLConnection conn = null;
-        InputStream is = null;
+        String out;
 
         try {
             // 用户名 密码
             // URL 地址
             String path = "http://" + getIP() + "/HelloWeb/RegLet";
-            path = path + "?username=" + username + "&password=" + password + "&sid=" + sid + "&tel=" + tel;
 
             conn = (HttpURLConnection) new URL(path).openConnection();
-            conn.setConnectTimeout(3000); // 设置超时时间
             conn.setReadTimeout(3000);
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
             conn.setDoInput(true);
-            conn.setRequestMethod("GET"); // 设置获取信息方式
-            conn.setRequestProperty("Charset", "UTF-8"); // 设置接收数据编码格式
-
-            if (conn.getResponseCode() == 200) {
-                is = conn.getInputStream();
-                return parseInfo(is);
+            PrintWriter printWriter = new PrintWriter(conn.getOutputStream());
+            String post = "username=" + user.getUsername() + "&password=" + user.getPassword() + "&sid=" + String.valueOf(user.getS_Id()) + "&tel=" + user.getTel() + "&avatar=" + user.getAvatar() +"&sex=" + String.valueOf(user.getSex()) + "&email=" + user.getEmail();
+            printWriter.write(post);
+            printWriter.flush();
+            BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            int len;
+            byte[] arr = new byte[1024];
+            while ((len=bis.read(arr))!= -1) {
+                bos.write(arr,0,len);
+                bos.flush();
             }
-
+            out = new String(bos.toByteArray(), "utf-8");
+            bos.close();
+            return out;
         }catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -86,25 +97,8 @@ public class WebService extends NetService{
             if (conn != null) {
                 conn.disconnect();
             }
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
 
         }
-        return null;
+        return "noResponse";
     }
-
-    // 将输入流转化为 String 型
-    private static String parseInfo(InputStream inStream) throws Exception {
-        byte[] data = read(inStream);
-        // 转化为字符串
-        return new String(data, "UTF-8");
-    }
-
-    // 将输入流转化为byte型
-
 }
