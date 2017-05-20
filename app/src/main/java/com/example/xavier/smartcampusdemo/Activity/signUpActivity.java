@@ -1,4 +1,4 @@
-package com.example.xavier.smartcampusdemo.Activity;
+package com.example.xavier.smartcampusdemo.activity;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -20,11 +20,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.example.xavier.smartcampusdemo.Entity.user;
+import com.example.xavier.smartcampusdemo.entity.user;
 import com.example.xavier.smartcampusdemo.R;
-import com.example.xavier.smartcampusdemo.Service.WebService;
-import com.example.xavier.smartcampusdemo.Util.NetUtil.UploadFileUtil;
-import com.example.xavier.smartcampusdemo.Util.UIUtils;
+import com.example.xavier.smartcampusdemo.service.WebService;
+import com.example.xavier.smartcampusdemo.util.NetUtil.UploadFileUtil;
+import com.example.xavier.smartcampusdemo.util.UIUtils;
 
 import java.io.File;
 import java.io.IOException;

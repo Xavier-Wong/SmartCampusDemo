@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.xavier.smartcampusdemo" >
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -11,54 +10,46 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".Activity.MyApplication"
+        android:name=".activity.MyApplication"
+        android:theme="@style/AppTheme.NoActionBar"
         android:supportsRtl="true">
         <activity
-            android:name=".Activity.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.BaseActivity" >
+            android:name=".activity.BaseActivity" >
         </activity>
         <activity
-            android:name=".Activity.SignInActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activity.SignInActivity">
         </activity>
         <activity
-            android:name=".Activity.SignUpActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activity.SignUpActivity">
         </activity>
         <activity
-            android:name=".Activity.ForumsDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activity.ForumsDetailsActivity">
         </activity>
         <activity
-            android:name=".Activity.VideoDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".activity.VideoDetailsActivity">
         </activity>
         <activity
-            android:name=".Activity.ForumPublishActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".activity.BlogDetailsActivity">
+        </activity>
+        <activity
+            android:name=".activity.ForumPublishActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
         <activity
-            android:name=".Activity.VideoPublishActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".activity.VideoPublishActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
         <activity
-            android:name=".Activity.BlogPublishActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".activity.BlogPublishActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">
-        </activity>
-        <activity
-            android:name=".Activity.BlogDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

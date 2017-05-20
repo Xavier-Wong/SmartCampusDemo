@@ -185,12 +185,12 @@
                 "from": {
                     "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 38,
+                        "startLine": 42,
                         "startColumn": 4,
-                        "startOffset": 1627,
-                        "endLine": 41,
+                        "startOffset": 1643,
+                        "endLine": 45,
                         "endColumn": 12,
-                        "endOffset": 1895
+                        "endOffset": 1911
                     }
                 }
             },
@@ -206,12 +206,12 @@
                 "from": {
                     "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 18,
+                        "startLine": 22,
                         "startColumn": 4,
-                        "startOffset": 782,
-                        "endLine": 35,
+                        "startOffset": 798,
+                        "endLine": 39,
                         "endColumn": 12,
-                        "endOffset": 1589
+                        "endOffset": 1605
                     }
                 }
             },
@@ -227,12 +227,12 @@
                 "from": {
                     "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 7,
+                        "startLine": 11,
                         "startColumn": 4,
-                        "startOffset": 200,
-                        "endLine": 15,
+                        "startOffset": 216,
+                        "endLine": 19,
                         "endColumn": 12,
-                        "endOffset": 722
+                        "endOffset": 738
                     }
                 }
             },
@@ -241,8 +241,9 @@
                     "startLine": 42,
                     "startColumn": 4,
                     "startOffset": 2085,
-                    "endColumn": 72,
-                    "endOffset": 2153
+                    "endLine": 44,
+                    "endColumn": 12,
+                    "endOffset": 2166
                 },
                 "from": {
                     "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml",
@@ -250,27 +251,30 @@
                         "startLine": 2,
                         "startColumn": 4,
                         "startOffset": 19,
-                        "endColumn": 79,
-                        "endOffset": 94
+                        "endLine": 4,
+                        "endColumn": 12,
+                        "endOffset": 102
                     }
                 }
             },
             {
                 "to": {
-                    "startLine": 43,
+                    "startLine": 45,
                     "startColumn": 4,
-                    "startOffset": 2158,
-                    "endColumn": 50,
-                    "endOffset": 2204
+                    "startOffset": 2171,
+                    "endLine": 47,
+                    "endColumn": 12,
+                    "endOffset": 2230
                 },
                 "from": {
                     "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml",
                     "position": {
-                        "startLine": 4,
+                        "startLine": 6,
                         "startColumn": 4,
-                        "startOffset": 102,
-                        "endColumn": 57,
-                        "endOffset": 155
+                        "startOffset": 110,
+                        "endLine": 8,
+                        "endColumn": 12,
+                        "endOffset": 171
                     }
                 }
             }

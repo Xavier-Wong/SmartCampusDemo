@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/personal_avatar_bg"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/default_avatar"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp">
+
+            <FrameLayout
+
+                android:layout_weight="1.0"
+                android:layout_width="40dp"
+                android:layout_height="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    fresco:roundAsCircle="true"
+                    android:id="@+id/personal_avatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/default_avatar"/>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/personal_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:textColor="#ffffff"
+                android:text=""/>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

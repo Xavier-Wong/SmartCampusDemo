@@ -68,28 +68,71 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/blog_img1"
-            android:scaleType="centerCrop"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
+        <FrameLayout
             android:layout_weight="1.0"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:contentDescription="" />
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/blog_img2"
-            android:scaleType="centerCrop"
+            android:layout_height="100dp">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/blog_img1"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="" />
+
+            <ImageView
+                android:id="@+id/blog_wtpic_pic_tag1"
+                android:layout_gravity="end|bottom"
+                android:layout_width="20dp"
+                android:layout_height="10dp"
+                android:visibility="invisible"
+                android:alpha="0.7"
+                android:src="@drawable/tag_gif"/>
+        </FrameLayout>
+        <FrameLayout
             android:layout_weight="1.0"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:contentDescription="" />
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/blog_img3"
-            android:scaleType="centerCrop"
+            android:layout_height="100dp">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/blog_img2"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="" />
+
+            <ImageView
+                android:id="@+id/blog_wtpic_pic_tag2"
+                android:layout_gravity="end|bottom"
+                android:layout_width="20dp"
+                android:layout_height="10dp"
+                android:visibility="invisible"
+                android:alpha="0.7"
+                android:src="@drawable/tag_gif"/>
+        </FrameLayout>
+        <FrameLayout
             android:layout_weight="1.0"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:contentDescription="" />
+            android:layout_height="100dp">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/blog_img3"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="" />
+
+            <ImageView
+                android:id="@+id/blog_wtpic_pic_tag3"
+                android:layout_gravity="end|bottom"
+                android:layout_width="20dp"
+                android:layout_height="10dp"
+                android:visibility="invisible"
+                android:alpha="0.7"
+                android:src="@drawable/tag_gif"/>
+        </FrameLayout>
     </LinearLayout>
 
     <LinearLayout

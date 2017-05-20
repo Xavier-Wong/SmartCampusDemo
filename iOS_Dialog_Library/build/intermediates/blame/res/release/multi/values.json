@@ -11,7 +11,14 @@
                     "endOffset": 101
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 195,
+                        "endColumn": 50,
+                        "endOffset": 241
+                    }
                 }
             },
             {
@@ -23,7 +30,14 @@
                     "endOffset": 152
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 298,
+                        "endColumn": 50,
+                        "endOffset": 344
+                    }
                 }
             },
             {
@@ -35,7 +49,14 @@
                     "endOffset": 202
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 247,
+                        "endColumn": 49,
+                        "endOffset": 292
+                    }
                 }
             },
             {
@@ -47,7 +68,14 @@
                     "endOffset": 253
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 143,
+                        "endColumn": 50,
+                        "endOffset": 189
+                    }
                 }
             },
             {
@@ -59,7 +87,14 @@
                     "endOffset": 293
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 102,
+                        "endColumn": 39,
+                        "endOffset": 137
+                    }
                 }
             },
             {
@@ -71,7 +106,14 @@
                     "endOffset": 335
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\color.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 59,
+                        "endColumn": 41,
+                        "endOffset": 96
+                    }
                 }
             },
             {
@@ -83,7 +125,14 @@
                     "endOffset": 393
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\dimens.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\dimens.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 92,
+                        "endColumn": 57,
+                        "endOffset": 145
+                    }
                 }
             },
             {
@@ -95,7 +144,14 @@
                     "endOffset": 449
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\dimens.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\dimens.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 151,
+                        "endColumn": 55,
+                        "endOffset": 202
+                    }
                 }
             },
             {
@@ -107,7 +163,14 @@
                     "endOffset": 496
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\strings.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 58,
+                        "endColumn": 46,
+                        "endOffset": 100
+                    }
                 }
             },
             {
@@ -120,7 +183,15 @@
                     "endOffset": 766
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml",
+                    "position": {
+                        "startLine": 42,
+                        "startColumn": 4,
+                        "startOffset": 1643,
+                        "endLine": 45,
+                        "endColumn": 12,
+                        "endOffset": 1911
+                    }
                 }
             },
             {
@@ -154,7 +225,15 @@
                     "endOffset": 2080
                 },
                 "from": {
-                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml"
+                    "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\src\\main\\res\\values\\styles.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 216,
+                        "endLine": 19,
+                        "endColumn": 12,
+                        "endOffset": 738
+                    }
                 }
             },
             {

@@ -1,64 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:fitsSystemWindows="true"
-    tools:context=".Activity.ForumsDetailsActivity" >
+    tools:context=".activity.ForumsDetailsActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/forums_details_toolbar"
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/forum_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        android:background="@drawable/forums_reply_toolbar">
-    </android.support.v7.widget.Toolbar>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <include
-        android:id="@+id/techforum_reply_window"
-        layout="@layout/techforum_reply"
-        android:visibility="invisible"/>
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/forum_collapsing_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/customblue"
+            app:statusBarScrim="@color/customblue"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/techForumDetails_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/forums_details_toolbar"
-        android:layout_above="@id/techforum_reply_window"/>
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/forum_collapsing_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_avatar"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7" />
 
-    <RelativeLayout
-        android:id="@+id/forums_details_is_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="@color/white"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/forums_details_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin">
+
+                <LinearLayout
+                    android:id="@+id/forum_toolbar_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/forum_toolbar_avatar"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/default_avatar"
+                        fresco:roundAsCircle="true" />
+
+                    <TextView
+                        android:id="@+id/forum_toolbar_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:text=""
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/techforum_reply"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="55dp"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
         android:visibility="visible"
-        android:gravity="center">
+        app:backgroundTint="@color/customblue"
+        app:elevation="4dp"
+        app:layout_anchor="@id/forum_app_bar"
+        app:layout_anchorGravity="bottom|end|right"
+        app:rippleColor="@color/aliceblue"
+        app:srcCompat="@drawable/ask" />
 
-        <ProgressBar
-            android:id="@+id/forums_details_progress_bar"
-            style="@android:style/Widget.ProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/forums_details_progress_text"
-            android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/forums_details_progress_bar"
-            android:layout_toEndOf="@+id/forums_details_progress_bar"
-            android:layout_height="wrap_content"
-            android:text="@string/isLoading"
-            android:textColor="#434343"
-            android:textSize="14sp"
-            />
-        <Button
-            android:id="@+id/retry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/click_retry"
-            android:visibility="invisible"/>
-    </RelativeLayout>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

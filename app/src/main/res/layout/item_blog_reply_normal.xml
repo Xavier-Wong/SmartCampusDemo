@@ -1,58 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="10dp"
-    android:layout_marginStart="10dp"
+    android:orientation="vertical"
     android:id="@+id/blog_reply_container"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp">
+    android:clickable="true"
+    android:background="@color/white">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        fresco:roundAsCircle="true"
-        android:id="@+id/blog_comment_avatar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/default_avatar"/>
+    <include layout="@layout/activity_blog_details_sticker"/>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp">
+        android:layout_height="wrap_content">
+        <com.facebook.drawee.view.SimpleDraweeView
+            fresco:roundAsCircle="true"
+            android:id="@+id/blog_comment_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/default_avatar"/>
 
-        <TextView
-            android:id="@+id/blog_comment_author"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:textSize="16sp"
-            android:textColor="#F46200"
-            android:text=""/>
-
-        <TextView
-            android:id="@+id/blog_comment_time"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:textSize="16sp"
-            android:textColor="@color/gainsboro"
-            android:text=""/>
-
-        <TextView
-            android:id="@+id/blog_comment_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:textColor="#333333"
-            android:text=""
-            android:layout_marginRight="10dp" />
+            android:layout_marginLeft="10dp">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/divider"
-            android:contentDescription="" />
+            <TextView
+                android:id="@+id/blog_comment_author"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:textSize="16sp"
+                android:textColor="#F46200"
+                android:text=""/>
+
+            <TextView
+                android:id="@+id/blog_comment_time"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:textSize="16sp"
+                android:textColor="@color/gainsboro"
+                android:text=""/>
+
+            <TextView
+                android:id="@+id/blog_comment_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#333333"
+                android:text=""
+                android:layout_marginRight="10dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/divider"
+                android:contentDescription="" />
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

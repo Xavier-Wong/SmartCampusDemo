@@ -5,7 +5,7 @@
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:gravity="center"
-    tools:context="com.example.xavier.smartcampusdemo.Activity.MainActivity" >
+    tools:context="com.example.xavier.smartcampusdemo.activity.MainActivity" >
 
     <FrameLayout
         android:id="@+id/username_layout"

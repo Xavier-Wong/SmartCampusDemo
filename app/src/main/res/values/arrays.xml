@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="forumtypes">
-        <item>哲学</item>
-        <item>经济学</item>
-        <item>法学</item>
-        <item>教育学</item>
-        <item>文学</item>
-        <item>历史学</item>
+    <string-array name="forumTypes">
+        <item>能源</item>
+        <item>安全科学与工程</item>
+        <item>管理</item>
+        <item>机械工程</item>
+        <item>建筑与土木工程</item>
+        <item>通信与信息工程</item>
+        <item>电气与控制工程</item>
+        <item>测绘科学与技术</item>
+        <item>计算机科学与技术</item>
+        <item>人文与外国语</item>
+        <item>地质与环境</item>
+        <item>艺术</item>
+        <item>化学与化工</item>
+        <item>材料科学与工程</item>
         <item>理学</item>
-        <item>工学</item>
-        <item>农学</item>
-        <item>医学</item>
-        <item>军事学</item>
-        <item>管理学</item>
+        <item>体育</item>
+        <item>马克思主义</item>
     </string-array>
 </resources>

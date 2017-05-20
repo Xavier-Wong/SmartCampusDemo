@@ -25,18 +25,27 @@
     <string name="zero">0</string>
     <string name="like">like</string>
     <string name="dislike">dislike</string>
-    <string name="philosophy">哲学</string>
-    <string name="economics">经济学</string>
-    <string name="jurisprudence">法学</string>
-    <string name="pedagogy">教育学</string>
-    <string name="literature">文学</string>
-    <string name="history">历史学</string>
-    <string name="science">理学</string>
-    <string name="engineering">工学</string>
-    <string name="medicine">医学</string>
-    <string name="military_science">军事学</string>
-    <string name="management_science">管理学</string>
-    <string name="agriculture">农学</string>
+
+    <!-- 论坛分类-->
+    <string name="nengyuan">能源</string>
+    <string name="anquan">安全科学与工程</string>
+    <string name="guanli">管理</string>
+    <string name="jixie">机械工程</string>
+    <string name="jianzhu">建筑与土木工程</string>
+    <string name="tongxin">通信与信息工程</string>
+    <string name="diankong">电气与控制工程</string>
+    <string name="cehui">测绘科学与技术</string>
+    <string name="jike">计算机科学与技术</string>
+    <string name="renwai">人文与外国语</string>
+    <string name="dihuan">地质与环境</string>
+    <string name="yishu">艺术</string>
+    <string name="huaxue">化学与化工</string>
+    <string name="cailiao">材料科学与工程</string>
+    <string name="lixue">理学</string>
+    <string name="tiyu">体育</string>
+    <string name="makesi">马克思主义</string>
+    <!-- 论坛分类-->
+
     <string name="click_retry">点击重试</string>
     <string name="publish_title">发表论坛</string>
     <string name="publish_confirm">发表</string>

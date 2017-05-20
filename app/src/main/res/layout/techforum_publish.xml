@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:background="@color/white"
-    tools:context=".Activity.ForumPublishActivity">
+    tools:context=".activity.ForumPublishActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/forum_publish_toolbar"
@@ -127,34 +127,117 @@
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_height="150dp">
-        <ImageView
-            android:id="@+id/forum_publish_photo_thumbnail"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
+        <FrameLayout
             android:layout_weight="1"
-            android:clickable="true"
-            android:src="@drawable/ic_control_point_black_80dp"
-            android:background="@drawable/choosing_img_frame"
-            android:contentDescription="" />
-        <ImageView
-            android:id="@+id/forum_publish_photo_thumbnail1"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:scaleType="centerCrop"
+                android:id="@+id/forum_publish_photo_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:clickable="true"
+                android:src="@drawable/ic_control_point_black_80dp"
+                android:background="@drawable/choosing_img_frame"
+                android:contentDescription="" />
+
+            <FrameLayout
+                android:id="@+id/forum_pic_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:alpha="0.5"
+                    android:contentDescription="" />
+
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@+id/forum_pic_progress_bar"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@style/NumberProgressBar_Beauty_Red"/>
+            </FrameLayout>
+        </FrameLayout>
+
+
+        <FrameLayout
             android:layout_weight="1"
-            android:clickable="true"
-            android:background="@drawable/choosing_img_frame"
-            android:contentDescription="" />
-        <ImageView
-            android:id="@+id/forum_publish_photo_thumbnail2"
             android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+            <ImageView
+                android:scaleType="centerCrop"
+                android:id="@+id/forum_publish_photo_thumbnail1"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:clickable="true"
+                android:background="@drawable/choosing_img_frame"
+                android:contentDescription="" />
+
+            <FrameLayout
+                android:id="@+id/forum_pic_progress1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:alpha="0.5"
+                    android:contentDescription="" />
+
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@+id/forum_pic_progress_bar1"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@style/NumberProgressBar_Beauty_Red"/>
+            </FrameLayout>
+        </FrameLayout>
+
+
+        <FrameLayout
             android:layout_weight="1"
-            android:clickable="true"
-            android:background="@drawable/choosing_img_frame"
-            android:contentDescription="" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+            <ImageView
+                android:scaleType="centerCrop"
+                android:id="@+id/forum_publish_photo_thumbnail2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:clickable="true"
+                android:background="@drawable/choosing_img_frame"
+                android:contentDescription="" />
+
+            <FrameLayout
+                android:id="@+id/forum_pic_progress2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:alpha="0.5"
+                    android:contentDescription="" />
+
+                <com.daimajia.numberprogressbar.NumberProgressBar
+                    android:id="@+id/forum_pic_progress_bar2"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    style="@style/NumberProgressBar_Beauty_Red"/>
+            </FrameLayout>
+        </FrameLayout>
 
 
     </LinearLayout>

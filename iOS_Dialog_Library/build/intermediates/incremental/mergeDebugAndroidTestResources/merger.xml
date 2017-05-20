@@ -19,7 +19,9 @@
         <item name="android:windowIsTranslucent">true</item>
         
         <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>
-    </style><style name="AppTheme" parent="AppBaseTheme"/><color name="actionsheet_gray">#8F8F8F</color><style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
+    </style><style name="AppTheme" parent="AppBaseTheme">
+
+    </style><color name="actionsheet_gray">#8F8F8F</color><style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -27,7 +29,9 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
-    </style><dimen name="activity_horizontal_margin">16dp</dimen><color name="actionsheet_red">#FD4A2E</color><style name="AppBaseTheme" parent="android:Theme.Light.NoTitleBar"/></file><file path="D:\AndroidProject\SmartCampusDemo\iOS_Dialog_Library\build\intermediates\bundles\debug\res\values-v11\values-v11.xml" qualifiers="v11"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.NoActionBar">
+    </style><dimen name="activity_horizontal_margin">16dp</dimen><color name="actionsheet_red">#FD4A2E</color><style name="AppBaseTheme" parent="android:Theme.Light.NoTitleBar">
+
+    </style></file><file path="D:\AndroidProject\SmartCampusDemo\iOS_Dialog_Library\build\intermediates\bundles\debug\res\values-v11\values-v11.xml" qualifiers="v11"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.NoActionBar">
         
     </style></file><file path="D:\AndroidProject\SmartCampusDemo\iOS_Dialog_Library\build\intermediates\bundles\debug\res\values-v13\values-v13.xml" qualifiers="v13"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.NoActionBar">
         

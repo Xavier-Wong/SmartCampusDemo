@@ -7,7 +7,7 @@
     android:layout_marginRight="20dp"
     android:layout_marginTop="20dp"
     android:gravity="center"
-    tools:context="com.example.xavier.smartcampusdemo.Activity.MainActivity">
+    tools:context="com.example.xavier.smartcampusdemo.activity.MainActivity">
 
     <LinearLayout
         android:id="@+id/signup_header"

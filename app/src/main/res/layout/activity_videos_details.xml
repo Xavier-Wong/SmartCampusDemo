@@ -1,77 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:orientation="vertical"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".Activity.VideoDetailsActivity"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fitsSystemWindows="true"
+    tools:context=".activity.VideoDetailsActivity">
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/video_details_toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:fitsSystemWindows="true"-->
-        <!--android:background="@drawable/forums_reply_toolbar">-->
-
-    <!--</android.support.v7.widget.Toolbar>-->
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/videos_details_is_loading"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:background="@color/white"-->
-        <!--android:visibility="visible"-->
-        <!--android:gravity="center">-->
-
-        <!--<ProgressBar-->
-            <!--android:id="@+id/videos_details_progress_bar"-->
-            <!--style="@android:style/Widget.ProgressBar.Small"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content" />-->
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_toRightOf="@+id/videos_details_progress_bar"-->
-            <!--android:layout_toEndOf="@+id/videos_details_progress_bar"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/isLoading"-->
-            <!--android:textColor="#434343"-->
-            <!--android:textSize="14sp"-->
-            <!--/>-->
-    <!--</RelativeLayout>-->
-
-    <RelativeLayout
-        android:id="@+id/video_container"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/video_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="200dp"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <VideoView
-            android:id="@+id/videoView"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/video_collapsing_layout"
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/darkgoldenrod"
+            app:statusBarScrim="@color/darkgoldenrod"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/video_tablayout"
-        android:layout_width="match_parent"
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/video_collapsing_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_avatar"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7" />
+
+                <com.example.xavier.smartcampusdemo.util.CosVideoView
+                    android:id="@+id/video_collapsing_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7"
+                    android:visibility="gone"
+                    />
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/video_details_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin">
+
+                <LinearLayout
+                    android:id="@+id/video_toolbar_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/video_toolbar_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/play_video"
+                        fresco:roundAsCircle="true" />
+
+                    <TextView
+                        android:id="@+id/video_toolbar_play"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:text="开始播放"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/activity_video_details_content"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/gainsboro"
-        app:tabTextColor="@color/BLOG_ITEM_CONTENT"
-        android:alpha="0.3"
-        app:tabMode="scrollable">
-
-    </android.support.design.widget.TabLayout>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/video_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/videoShareDetails_rv"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+        android:layout_marginBottom="55dp"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:visibility="visible"
+        app:backgroundTint="@color/darkgoldenrod"
+        app:elevation="4dp"
+        app:layout_anchor="@id/video_app_bar"
+        app:layout_anchorGravity="bottom|end|right"
+        app:rippleColor="@color/aliceblue"
+        app:srcCompat="@drawable/play_video_frameless" />
 
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

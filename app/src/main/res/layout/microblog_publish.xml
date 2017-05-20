@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:background="@color/white"
-    tools:context=".Activity.BlogPublishActivity">
+    tools:context=".activity.BlogPublishActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/blog_publish_toolbar"

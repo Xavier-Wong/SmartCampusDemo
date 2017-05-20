@@ -16,7 +16,9 @@
         <item name="android:windowIsTranslucent">true</item>
         
         <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>
-    </style><style name="AppTheme" parent="AppBaseTheme"/><style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
+    </style><style name="AppTheme" parent="AppBaseTheme">
+
+    </style><style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -27,7 +29,9 @@
     </style><style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/actionsheet_dialog_in</item>
         <item name="android:windowExitAnimation">@anim/actionsheet_dialog_out</item>
-    </style><style name="AppBaseTheme" parent="android:Theme.Light.NoTitleBar"/></file><file path="D:\AndroidProject\SmartCampusDemo\iOS_Dialog_Library\src\main\res\values-v11\styles.xml" qualifiers="v11"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.NoActionBar">
+    </style><style name="AppBaseTheme" parent="android:Theme.Light.NoTitleBar">
+
+    </style></file><file path="D:\AndroidProject\SmartCampusDemo\iOS_Dialog_Library\src\main\res\values-v11\styles.xml" qualifiers="v11"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.NoActionBar">
         
     </style></file><file path="D:\AndroidProject\SmartCampusDemo\iOS_Dialog_Library\src\main\res\values-v13\styles.xml" qualifiers="v13"><style name="AppBaseTheme" parent="android:Theme.Holo.Light.NoActionBar">
         

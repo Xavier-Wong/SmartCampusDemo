@@ -1,4 +1,4 @@
-package com.example.xavier.smartcampusdemo.Activity;
+package com.example.xavier.smartcampusdemo.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,10 +17,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.xavier.smartcampusdemo.R;
-import com.example.xavier.smartcampusdemo.Service.UserInfoService;
-import com.example.xavier.smartcampusdemo.Service.WebService;
-import com.example.xavier.smartcampusdemo.Util.JSONUtil;
-import com.example.xavier.smartcampusdemo.Util.UIUtils;
+import com.example.xavier.smartcampusdemo.service.UserInfoService;
+import com.example.xavier.smartcampusdemo.service.WebService;
+import com.example.xavier.smartcampusdemo.util.JSONUtil;
+import com.example.xavier.smartcampusdemo.util.UIUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -241,8 +241,9 @@
                     "startLine": 42,
                     "startColumn": 4,
                     "startOffset": 2085,
-                    "endColumn": 72,
-                    "endOffset": 2153
+                    "endLine": 44,
+                    "endColumn": 12,
+                    "endOffset": 2166
                 },
                 "from": {
                     "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
@@ -250,27 +251,30 @@
                         "startLine": 42,
                         "startColumn": 4,
                         "startOffset": 2085,
-                        "endColumn": 72,
-                        "endOffset": 2153
+                        "endLine": 44,
+                        "endColumn": 12,
+                        "endOffset": 2166
                     }
                 }
             },
             {
                 "to": {
-                    "startLine": 43,
+                    "startLine": 45,
                     "startColumn": 4,
-                    "startOffset": 2158,
-                    "endColumn": 50,
-                    "endOffset": 2204
+                    "startOffset": 2171,
+                    "endLine": 47,
+                    "endColumn": 12,
+                    "endOffset": 2230
                 },
                 "from": {
                     "file": "D:\\AndroidProject\\SmartCampusDemo\\iOS_Dialog_Library\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
-                        "startLine": 43,
+                        "startLine": 45,
                         "startColumn": 4,
-                        "startOffset": 2158,
-                        "endColumn": 50,
-                        "endOffset": 2204
+                        "startOffset": 2171,
+                        "endLine": 47,
+                        "endColumn": 12,
+                        "endOffset": 2230
                     }
                 }
             }

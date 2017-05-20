@@ -40,6 +40,10 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
-    <style name="AppBaseTheme" parent="android:Theme.Light.NoTitleBar"/>
-    <style name="AppTheme" parent="AppBaseTheme"/>
+    <style name="AppBaseTheme" parent="android:Theme.Light.NoTitleBar">
+
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+
+    </style>
 </resources>

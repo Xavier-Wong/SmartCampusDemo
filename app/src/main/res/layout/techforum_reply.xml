@@ -1,45 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_gravity="bottom"
-    android:layout_alignParentBottom="true"
-    android:gravity="center_vertical"
-    android:padding="5dp"
-    android:background="@drawable/techforum_reply_bg"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_forums_details"
+    android:background="@drawable/techforum_reply_bg" >
 
-    >
-
-    <TextView
-        android:id="@+id/forum_reply_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:text="@string/reply_tag"/>
-    <Button
-        android:id="@+id/forum_reply_commit"
-        android:layout_alignParentEnd="true"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/commit_tag"
-        android:textSize="12sp"
-        android:layout_alignParentRight="true" />
-    <EditText
-        android:id="@+id/forum_reply_content"
-        android:layout_toRightOf="@id/forum_reply_tag"
-        android:layout_toEndOf="@id/forum_reply_tag"
-        android:layout_toLeftOf="@id/forum_reply_commit"
-        android:layout_toStartOf="@id/forum_reply_commit"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/techForumDetails_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/forum_reply_style"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:textColor="@color/black"
-        android:gravity="center_vertical"
-        android:hint="@string/reply_input"/>
+        android:layout_height="wrap_content"
+        android:overScrollMode="never" />
 
+    <include layout="@layout/activity_forum_details_sticky" />
 
-</RelativeLayout>
+</FrameLayout>

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:background="@color/white"
-    tools:context=".Activity.VideoPublishActivity">
+    tools:context=".activity.VideoPublishActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/video_publish_toolbar"
@@ -100,24 +100,29 @@
 
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/forum_publish_foot"
-        android:orientation="horizontal"
-        android:padding="17dp"
-        android:gravity="center"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
 
+        <ProgressBar
+            android:id="@+id/video_upload_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
         <TextView
+            android:gravity="center"
             android:id="@+id/video_publish_upload"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="上传视频"
             android:textColor="@color/black"
-            android:gravity="center"
-            android:clickable="true"/>
-    </LinearLayout>
+            android:clickable="true"
+            android:background="@color/white"
+            android:alpha="0.5"/>
+    </RelativeLayout>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

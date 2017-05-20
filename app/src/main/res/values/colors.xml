@@ -2,7 +2,6 @@
 <resources>
 
     <color name="MAIN_BG">#12B7F5</color><!--主界面背景色 -->
-
     <color name="BLOG_BG">#F1F1F1</color><!--微博背景 -->
     <color name="BLOG_ITEM_BG">#FEFEFE</color><!--微博项目背景 -->
     <color name="BLOG_ITEM_AUTHOR">#F46200</color><!--微博项目作者 -->
@@ -11,9 +10,9 @@
     <color name="BLOG_ITEM_PRESS">#EEEEEE</color><!--微博项目点击 -->
     <color name="BLOG_ITEM_DIVIDER">#E9E9E9</color><!--微博项目分割线 -->
     <color name="customslightlywhite">#F5F5F5</color>
-    <color name="colorPrimary">#12B7F5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#344df0</color>
+    <color name="colorPrimaryDark">#00008B</color>
+    <color name="colorAccent">#6495ED</color>
     <color name="white">#FFFFFF</color><!--白色 -->
     <color name="ivory">#FFFFF0</color><!--象牙色 -->
     <color name="lightyellow">#FFFFE0</color><!--亮黄色 -->
@@ -28,7 +27,7 @@
     <color name="blanchedalmond">#FFEBCD</color><!--白杏色 -->
     <color name="mistyrose">#FFE4E1</color><!--浅玫瑰色 -->
     <color name="text_color">#717171</color><!--浅玫瑰色 -->
-
+    <color name="customblue">#344df0</color>
     <color name="bisque">#FFE4C4</color><!--桔黄色 -->
     <color name="moccasin">#FFE4B5</color><!--鹿皮色 -->
     <color name="navajowhite">#FFDEAD</color><!--纳瓦白 -->
