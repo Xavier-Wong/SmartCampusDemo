@@ -1,11 +1,9 @@
 package com.example.xavier.smartcampusdemo.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,13 +15,9 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,24 +35,15 @@ import com.example.xavier.smartcampusdemo.entity.forum;
 import com.example.xavier.smartcampusdemo.entity.forum_reply;
 import com.example.xavier.smartcampusdemo.service.ForumItemService;
 import com.example.xavier.smartcampusdemo.util.ColorUtils;
-import com.example.xavier.smartcampusdemo.util.UIUtils;
+import com.example.xavier.smartcampusdemo.util.DisplayUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.xavier.smartcampusdemo.service.NetService.getAvatarPath;
-import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 
 /**
  * Created by Xavier on 2/27/2017.
@@ -68,20 +53,16 @@ import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 public class ForumsDetailsActivity extends SwipeBackActivity implements View.OnClickListener{
 
     SharedPreferences sharedPreferences;
-    private techForumDetailsViewAdapter adapter;
-
     View toobar_view;
     TextView toobar_title;
     SimpleDraweeView toobar_avatar;
-
     EditText et_reply_content;
     ImageView iv_reply_send;
     View popView;
     PopupWindow popWindow;
-
     Activity activity;
-
     forum forum;
+    private techForumDetailsViewAdapter adapter;
     private Integer page = 0;
     private String fid, uid, content;
     private String to_send = "";
@@ -89,11 +70,89 @@ public class ForumsDetailsActivity extends SwipeBackActivity implements View.OnC
     private boolean noMore = false;
 
     private CollapsingToolbarLayoutState state;
-    private enum CollapsingToolbarLayoutState {
-        EXPANDED,
-        COLLAPSED,
-        INTERNEDIATE
-    }
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                SimpleDraweeView col_avatar = (SimpleDraweeView) findViewById(R.id.forum_collapsing_avatar);
+                col_avatar.setImageURI(getAvatarPath() + forum.getAvatar());
+                toobar_avatar.setImageURI(getAvatarPath() + forum.getAvatar());
+                toobar_title.setText(forum.getAuthor());
+
+                startCollapsing();
+
+                final LinearLayout tvStickyHeaderView = (LinearLayout) findViewById(R.id.forum_reply_sticker);
+                tvStickyHeaderView.setOnClickListener(ForumsDetailsActivity.this);
+
+                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity);
+                adapter = new techForumDetailsViewAdapter(activity, null);
+
+                RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.techForumDetails_rv);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mRecyclerView.setHasFixedSize(true);
+                mRecyclerView.setAdapter(adapter);
+
+                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+                        int firstVisibleItems, visibleItemCount, totalItemCount;
+                        visibleItemCount = mLayoutManager.getChildCount();
+                        totalItemCount = mLayoutManager.getItemCount();
+                        firstVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                        View stickyInfoView = recyclerView.findChildViewUnder(
+                                tvStickyHeaderView.getMeasuredWidth() / 2, 5);
+
+                        if (stickyInfoView != null && stickyInfoView.getContentDescription() != null) {
+
+                        }
+
+                        View transInfoView = recyclerView.findChildViewUnder(
+                                tvStickyHeaderView.getMeasuredWidth() / 2, tvStickyHeaderView.getMeasuredHeight() + 1);
+
+                        if (transInfoView != null && transInfoView.getTag() != null) {
+
+                            int transViewStatus = (int) transInfoView.getTag();
+                            int dealtY = transInfoView.getTop() - tvStickyHeaderView.getMeasuredHeight();
+
+                            if (transViewStatus == techForumDetailsViewAdapter.HAS_STICKY_VIEW) {
+                                if (transInfoView.getTop() > 0) {
+                                    tvStickyHeaderView.setTranslationY(dealtY);
+                                    if (tvStickyHeaderView.getVisibility() == View.VISIBLE)
+                                        tvStickyHeaderView.setVisibility(View.GONE);
+                                } else {
+                                    tvStickyHeaderView.setTranslationY(0);
+                                    if (tvStickyHeaderView.getVisibility() == View.GONE)
+                                        tvStickyHeaderView.setVisibility(View.VISIBLE);
+                                }
+                            } else if (transViewStatus == techForumDetailsViewAdapter.NONE_STICKY_VIEW) {
+                                tvStickyHeaderView.setTranslationY(0);
+                            } else if (transViewStatus == techForumDetailsViewAdapter.FIRST_STICKY_VIEW) {
+                                if (tvStickyHeaderView.getVisibility() == View.VISIBLE)
+                                    tvStickyHeaderView.setVisibility(View.GONE);
+                            }
+                        }
+
+                        if ((visibleItemCount + firstVisibleItems) >= totalItemCount && !isLoading) {
+                            // 判断点
+                            if (!noMore) {
+                                isLoading = true;
+                                new MyAsyncTaskGetForumReplyItem().execute(page);
+                            }
+                        }
+
+                    }
+                });
+
+                adapter.setDetailsObject(forum);
+                new MyAsyncTaskGetForumReplyItem().execute(page);
+            }
+        }
+    };
+
     boolean isLogged() {
         sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
         return !sharedPreferences.getAll().isEmpty();
@@ -174,29 +233,6 @@ public class ForumsDetailsActivity extends SwipeBackActivity implements View.OnC
         }
     }
 
-    private class textChange implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if(s.toString().length()>0) {
-                iv_reply_send.setBackgroundColor(ColorUtils.getColor(ForumsDetailsActivity.this ,R.color.customblue));
-                iv_reply_send.setClickable(true);
-            }
-            else {
-                iv_reply_send.setBackgroundColor(ColorUtils.getColor(ForumsDetailsActivity.this ,R.color.gainsboro));
-                iv_reply_send.setClickable(false);
-            }
-        }
-    }
-
     void initPopupWindow() {
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
@@ -224,19 +260,6 @@ public class ForumsDetailsActivity extends SwipeBackActivity implements View.OnC
         et_reply_content.setSelection(et_reply_content.getText().length());
 
         popWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-    }
-
-    private class InitialThread extends Thread {
-
-        @Override
-        public void run() {
-            forum = ForumItemService.getForumItem(fid);
-            if(forum.getU_id() !=0) {
-                Message msg = new Message();
-                msg.what = 1;
-                handler.sendMessage(msg);
-            }
-        }
     }
 
     private void startCollapsing() {
@@ -269,89 +292,6 @@ public class ForumsDetailsActivity extends SwipeBackActivity implements View.OnC
             }
         });
     }
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what == 1) {
-                SimpleDraweeView col_avatar = (SimpleDraweeView) findViewById(R.id.forum_collapsing_avatar);
-                col_avatar.setImageURI(getAvatarPath()+forum.getAvatar());
-                toobar_avatar.setImageURI(getAvatarPath()+forum.getAvatar());
-                toobar_title.setText(forum.getAuthor());
-
-                startCollapsing();
-
-                final LinearLayout tvStickyHeaderView = (LinearLayout) findViewById(R.id.forum_reply_sticker);
-                tvStickyHeaderView.setOnClickListener(ForumsDetailsActivity.this);
-
-                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity);
-                adapter = new techForumDetailsViewAdapter(activity, null);
-
-                RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.techForumDetails_rv);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                mRecyclerView.setHasFixedSize(true);
-                mRecyclerView.setAdapter(adapter);
-
-                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-                    @Override
-                    public void onScrolled(RecyclerView recyclerView,int dx, int dy) {
-
-                        int firstVisibleItems, visibleItemCount, totalItemCount;
-                        visibleItemCount = mLayoutManager.getChildCount();
-                        totalItemCount = mLayoutManager.getItemCount();
-                        firstVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                        View stickyInfoView = recyclerView.findChildViewUnder(
-                                tvStickyHeaderView.getMeasuredWidth() / 2, 5);
-
-                        if (stickyInfoView != null && stickyInfoView.getContentDescription() != null) {
-
-                        }
-
-                        View transInfoView = recyclerView.findChildViewUnder(
-                                tvStickyHeaderView.getMeasuredWidth() / 2, tvStickyHeaderView.getMeasuredHeight() + 1);
-
-                        if (transInfoView != null && transInfoView.getTag() != null) {
-
-                            int transViewStatus = (int) transInfoView.getTag();
-                            int dealtY = transInfoView.getTop() - tvStickyHeaderView.getMeasuredHeight();
-
-                            if (transViewStatus == techForumDetailsViewAdapter.HAS_STICKY_VIEW) {
-                                if (transInfoView.getTop() > 0) {
-                                    tvStickyHeaderView.setTranslationY(dealtY);
-                                    if(tvStickyHeaderView.getVisibility()==View.VISIBLE)
-                                        tvStickyHeaderView.setVisibility(View.GONE);
-                                } else {
-                                    tvStickyHeaderView.setTranslationY(0);
-                                    if(tvStickyHeaderView.getVisibility()==View.GONE)
-                                        tvStickyHeaderView.setVisibility(View.VISIBLE);
-                                }
-                            } else if (transViewStatus == techForumDetailsViewAdapter.NONE_STICKY_VIEW) {
-                                tvStickyHeaderView.setTranslationY(0);
-                            }
-                            else if (transViewStatus == techForumDetailsViewAdapter.FIRST_STICKY_VIEW) {
-                                if(tvStickyHeaderView.getVisibility()==View.VISIBLE)
-                                    tvStickyHeaderView.setVisibility(View.GONE);
-                            }
-                        }
-
-                        if ((visibleItemCount + firstVisibleItems) >= totalItemCount && !isLoading) {
-                            // 判断点
-                            if(!noMore) {
-                                isLoading = true;
-                                new MyAsyncTaskGetForumReplyItem().execute(page);
-                            }
-                        }
-
-                    }
-                });
-
-                adapter.setDetailsObject(forum);
-                new MyAsyncTaskGetForumReplyItem().execute(page);
-            }
-        }
-    };
 
     void refresh() {
         isLoading = true;
@@ -359,6 +299,47 @@ public class ForumsDetailsActivity extends SwipeBackActivity implements View.OnC
         noMore = false;
         page = 0;
         new MyAsyncTaskGetForumReplyItem().execute(page);
+    }
+
+    private enum CollapsingToolbarLayoutState {
+        EXPANDED,
+        COLLAPSED,
+        INTERNEDIATE
+    }
+
+    private class textChange implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.toString().length() > 0) {
+                iv_reply_send.setBackgroundColor(ColorUtils.getColor(ForumsDetailsActivity.this, R.color.customblue));
+                iv_reply_send.setClickable(true);
+            } else {
+                iv_reply_send.setBackgroundColor(ColorUtils.getColor(ForumsDetailsActivity.this, R.color.gainsboro));
+                iv_reply_send.setClickable(false);
+            }
+        }
+    }
+
+    private class InitialThread extends Thread {
+
+        @Override
+        public void run() {
+            forum = ForumItemService.getForumItem(fid);
+            if (forum.getU_id() != 0) {
+                Message msg = new Message();
+                msg.what = 1;
+                handler.sendMessage(msg);
+            }
+        }
     }
 
     private class MyAsyncTaskGetForumReplyItem extends AsyncTask<Integer, String, List<forum_reply>> {
@@ -395,8 +376,9 @@ public class ForumsDetailsActivity extends SwipeBackActivity implements View.OnC
 
         @Override
         protected void onPostExecute(String state) {
-            if(state.equals("评论成功")) {
-                UIUtils.customCenterShortToast(ForumsDetailsActivity.this, "成功", 0 ,0 );
+            if (!state.equals("评论成功")) {
+                DisplayUtils.customCenterShortToast(ForumsDetailsActivity.this, "评论失败", 0, 0);
+            } else {
                 popWindow.dismiss();
                 to_send = "";
                 refresh();

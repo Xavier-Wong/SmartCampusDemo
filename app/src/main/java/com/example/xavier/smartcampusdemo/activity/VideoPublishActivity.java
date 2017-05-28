@@ -17,39 +17,27 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.xavier.smartcampusdemo.R;
 import com.example.xavier.smartcampusdemo.entity.video;
 import com.example.xavier.smartcampusdemo.fragment.videoShare.videoShare;
 import com.example.xavier.smartcampusdemo.service.VideoItemService;
 import com.example.xavier.smartcampusdemo.service.WebService;
-import com.example.xavier.smartcampusdemo.util.ColorUtils;
+import com.example.xavier.smartcampusdemo.util.DisplayUtils;
 import com.example.xavier.smartcampusdemo.util.NetUtil.UploadFileUtil;
-import com.example.xavier.smartcampusdemo.util.UIUtils;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Properties;
 import java.util.UUID;
 
 import zhangphil.iosdialog.widget.ActionSheetDialog;
-
-import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 
 
 /**
@@ -59,19 +47,18 @@ import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 
 public class VideoPublishActivity extends BaseActivity implements View.OnClickListener{
 
-    private String path;
     String videoFilePath, filePath, availableName;
-    private String uid, content, title, video_str;
     ProgressBar videoProgress;
-
     SharedPreferences sharedPreferences;
     TextView publish_commit;
     TextView choose_upload;
     EditText publish_title;
     EditText publish_content;
-
     Activity activity;
     Toolbar toolbar;
+    private String path;
+    private String uid, content, title, video_str;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,43 +104,21 @@ public class VideoPublishActivity extends BaseActivity implements View.OnClickLi
         publish_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (videoProgress.getProgress() != 100) {
+                    DisplayUtils.customCenterShortToast(VideoPublishActivity.this, "请先上传视频", 0, 0);
+                    return;
+                }
                 sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
                 uid = sharedPreferences.getString("userID","");
                 title = publish_title.getText().toString();
                 content = publish_content.getText().toString();
                 video_str = availableName;
                 new MyAsyncTaskPostVideoItem().execute();
-                refresh();
             }
         });
+        publish_commit.setClickable(false);
     }
 
-    private class textChange implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @TargetApi(Build.VERSION_CODES.M)
-        @Override
-        public void afterTextChanged(Editable s) {
-            boolean pt = publish_title.getText().length() > 0;
-            boolean pc = publish_content.getText().length() > 0;
-            if(pt&&pc) {
-                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
-                publish_commit.setClickable(true);
-            }
-            else {
-                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.gainsboro));
-                publish_commit.setClickable(false);
-            }
-        }
-    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -187,7 +152,7 @@ public class VideoPublishActivity extends BaseActivity implements View.OnClickLi
             public void onClick(int which) {
                 // 相册选取
                 Intent intent2 = new Intent(Intent.ACTION_GET_CONTENT);
-                intent2.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "video/*");
+                intent2.setDataAndType(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, "video/*");
                 startActivityForResult(intent2, 103);
             }
         }).show();
@@ -204,14 +169,12 @@ public class VideoPublishActivity extends BaseActivity implements View.OnClickLi
                     availableName =  "video_" + videoId + extension;
                     filePath = videoFilePath;
                     new MyAsyncTaskUploadVideo().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    videoProgress.setProgress(0);
                     new MyAsyncTaskPostProgress().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 break;
             case 103:
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri originalUri = data.getData(); // 获得图片的uri
-
+                    Uri originalUri = data.getData();
                     // 好像是android多媒体数据库的封装接口，具体的看Android文档
                     Cursor cursor = activity.getContentResolver().query(originalUri, null, null, null, null);
                     String path = null;
@@ -229,19 +192,13 @@ public class VideoPublishActivity extends BaseActivity implements View.OnClickLi
                             cursor.close();
                         }
                     }
-                    // 按我个人理解 这个是获得用户选择的图片的索引值
-//                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-//                    // 将光标移至开头 ，这个很重要，不小心很容易引起越界
-//                    cursor.moveToFirst();
-//                    // 最后根据索引值获取图片路径
-//                    String path = cursor.getString(column_index);
+
                     File file = new File(path);
                     String extension = file.getName().substring(file.getName().lastIndexOf("."));
                     String videoId = UUID.randomUUID().toString();
                     availableName = "video_"+videoId+extension;
                     filePath = path;
                     new MyAsyncTaskUploadVideo().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    videoProgress.setProgress(0);
                     new MyAsyncTaskPostProgress().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                 }
@@ -249,10 +206,35 @@ public class VideoPublishActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-
     private void refresh() {
         videoShare.refresh();
         finish();
+    }
+
+    private class textChange implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @TargetApi(Build.VERSION_CODES.M)
+        @Override
+        public void afterTextChanged(Editable s) {
+            boolean pt = publish_title.getText().length() > 0;
+            boolean pc = publish_content.getText().length() > 0;
+            if (pt && pc) {
+                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
+                publish_commit.setClickable(true);
+            } else {
+                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.gainsboro));
+                publish_commit.setClickable(false);
+            }
+        }
     }
 
     private class MyAsyncTaskUploadVideo extends AsyncTask<Integer, String, String> {
@@ -274,19 +256,15 @@ public class VideoPublishActivity extends BaseActivity implements View.OnClickLi
 
         @Override
         protected void onPostExecute(String result) {
-            if(result.equals("上传成功！")) {
-                Toast toast = Toast.makeText(VideoPublishActivity.this, result, Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
-            }
-            else {
-                UIUtils.customCenterShortToast(VideoPublishActivity.this, result, 0, 0);
+            if (!result.equals("上传成功！")) {
+                DisplayUtils.customCenterShortToast(VideoPublishActivity.this, result, 0, 0);
             }
         }
 
     }
 
     private class MyAsyncTaskPostVideoItem extends AsyncTask<Integer, String, String> {
+
         @Override
         protected String doInBackground(Integer... pages) {
             video video = new video();
@@ -308,14 +286,20 @@ public class VideoPublishActivity extends BaseActivity implements View.OnClickLi
     private class MyAsyncTaskPostProgress extends AsyncTask<Integer, Integer, Integer> {
         @Override
         protected Integer doInBackground(Integer... pages) {
-            String progressstr;
-            int progress = 0;
-            while(progress<100) {
-                progressstr = WebService.getFileUploadProgress();
-                if(!progressstr.equals(""))
-                    progress = Integer.parseInt(progressstr.substring(0, progressstr.indexOf("%")));
-                publishProgress(progress);
+            String progressStr = WebService.getFileUploadProgress();
+            int progress;
+            while (progressStr.equals("pending")) {
+                progressStr = WebService.getFileUploadProgress();
             }
+            publishProgress(0);
+            while (!progressStr.equals("finished")) {
+                progressStr = WebService.getFileUploadProgress();
+                if (progressStr.contains("%")) {
+                    progress = Integer.parseInt(progressStr.substring(0, progressStr.indexOf("%")));
+                    publishProgress(progress);
+                }
+            }
+            publishProgress(100);
             return null;
         }
 
@@ -325,7 +309,5 @@ public class VideoPublishActivity extends BaseActivity implements View.OnClickLi
             Log.i("progress", values[0]+"");
             videoProgress.setProgress(values[0]);
         }
-
-
     }
 }

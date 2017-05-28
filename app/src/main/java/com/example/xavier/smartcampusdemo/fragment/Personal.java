@@ -17,8 +17,8 @@ import com.example.xavier.smartcampusdemo.entity.user;
 import com.example.xavier.smartcampusdemo.service.UserInfoService;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import static com.example.xavier.smartcampusdemo.service.NetService.getAvatarBGPath;
 import static com.example.xavier.smartcampusdemo.service.NetService.getAvatarPath;
-import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 
 /**
  * Created by Xavier on 5/7/2017.
@@ -26,13 +26,13 @@ import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 
 public class Personal extends Fragment {
 
+    public int page = 0;
     SimpleDraweeView avatar, avatarBg;
     TextView username;
-
     SharedPreferences sharedPreferences;
     private String uid;
     private Activity activity;
-    public int page = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,12 +45,17 @@ public class Personal extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         sharedPreferences = activity.getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
-        uid = sharedPreferences.getString("userID","");
+        uid = sharedPreferences.getString("userID", "0");
 
         avatar = (SimpleDraweeView) activity.findViewById(R.id.personal_avatar);
         avatarBg = (SimpleDraweeView) activity.findViewById(R.id.personal_avatar_bg);
         username =(TextView) activity.findViewById(R.id.personal_username);
-        new MyAsyncTaskGetUserInfoItem().execute(uid);
+        if (uid.equals("0")) {
+            avatar.setImageURI(getAvatarPath() + "default.jpg");
+            avatarBg.setImageURI(getAvatarBGPath() + "default.jpg");
+            username.setText("游客");
+        } else
+            new MyAsyncTaskGetUserInfoItem().execute(uid);
         super.onActivityCreated(savedInstanceState);
     }
 

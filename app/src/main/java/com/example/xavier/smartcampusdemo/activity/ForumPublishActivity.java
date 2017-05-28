@@ -30,63 +30,59 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
-import com.example.xavier.smartcampusdemo.adapter.SpinnerArrayAdapter;
 import com.example.xavier.smartcampusdemo.R;
+import com.example.xavier.smartcampusdemo.adapter.SpinnerArrayAdapter;
 import com.example.xavier.smartcampusdemo.entity.forum;
 import com.example.xavier.smartcampusdemo.fragment.techForum;
 import com.example.xavier.smartcampusdemo.service.ForumItemService;
 import com.example.xavier.smartcampusdemo.service.WebService;
-import com.example.xavier.smartcampusdemo.util.ColorUtils;
+import com.example.xavier.smartcampusdemo.util.AutoGenerate;
 import com.example.xavier.smartcampusdemo.util.NetUtil.UploadFileUtil;
-import com.example.xavier.smartcampusdemo.util.UIUtils;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
 
 import zhangphil.iosdialog.widget.ActionSheetDialog;
-
-import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 
 /**
  * Created by Xavier on 4/1/2017.
  *
  */
 
-public class ForumPublishActivity extends BaseActivity{
+public class ForumPublishActivity extends BaseActivity implements View.OnClickListener {
 
-    private boolean isChose = false, isChose1 = false, isChose2 = false;
-    String imageFilePath, filePath, filePath1, filePath2;
-    String forumFileName, availableName;
-    private String img0, img1, img2;
-    private String uid, content, title, type, img;
     SharedPreferences sharedPreferences;
+    /*提交*/
     TextView publish_commit;
+    /*文本输入*/
     EditText publish_title;
     EditText publish_content;
+    String imageFilePath, //拍照储存路径
+            filePath; //上传照片本地路径
+    String autoGenName; //自动生成名字
+    String img0, img1, img2; //每张图片文件名
     ImageView iv_photo, iv_photo1, iv_photo2;
     View progress, progress1, progress2;
     NumberProgressBar progressBar, progressBar1, progressBar2;
-    private int index;
+    Activity activity;
+    Toolbar toolbar;
+    private String uid, content, title, type, img;
+    /*图片上传*/
+    private int index; //选中第几框
+    /*类型选择*/
     private SpinnerArrayAdapter mAdapter;
     private Spinner mSpinner;
-    private String[] mStringArray;
-    Activity activity;
 
-    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.techforum_publish);
+
         activity = this;
+
+        sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
+        uid = sharedPreferences.getString("userID", "");
+
         toolbar = (Toolbar) findViewById(R.id.forum_publish_toolbar);
         assert toolbar != null;
         toolbar.setTitle("");
@@ -117,7 +113,6 @@ public class ForumPublishActivity extends BaseActivity{
         publish_title = (EditText) findViewById(R.id.forum_publish_title);
         publish_content = (EditText) findViewById(R.id.forum_publish_content);
         publish_commit = (TextView) findViewById(R.id.forum_publish_commit);
-        mSpinner = (Spinner) findViewById(R.id.spinner);
 
         iv_photo = (ImageView) findViewById(R.id.forum_publish_photo_thumbnail);
         iv_photo1 = (ImageView) findViewById(R.id.forum_publish_photo_thumbnail1);
@@ -131,40 +126,41 @@ public class ForumPublishActivity extends BaseActivity{
         progressBar1 = (NumberProgressBar) findViewById(R.id.forum_pic_progress_bar1);
         progressBar2 = (NumberProgressBar) findViewById(R.id.forum_pic_progress_bar2);
 
-        mStringArray = getResources().getStringArray(R.array.forumTypes);
+        mSpinner = (Spinner) findViewById(R.id.spinner);
+        String[] mStringArray = getResources().getStringArray(R.array.forumTypes);
         mAdapter = new SpinnerArrayAdapter(this, mStringArray);
         mSpinner.setAdapter(mAdapter);
-        iv_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index = 0;
-                choose_photo(index);
-            }
-        });
-        iv_photo1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index = 1;
-                choose_photo(index);
-            }
-        });
-        iv_photo2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index = 2;
-                choose_photo(index);
-            }
-        });
-        iv_photo1.setClickable(false);
-        iv_photo2.setClickable(false);
+
         textChange tc = new textChange();
         publish_title.addTextChangedListener(tc);
         publish_content.addTextChangedListener(tc);
-        publish_commit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
-                uid = sharedPreferences.getString("userID","");
+
+        iv_photo.setOnClickListener(this);
+        iv_photo1.setOnClickListener(this);
+        iv_photo2.setOnClickListener(this);
+        publish_commit.setOnClickListener(this);
+
+        iv_photo1.setClickable(false);
+        iv_photo2.setClickable(false);
+        publish_commit.setClickable(false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.forum_publish_photo_thumbnail:
+                index = 0;
+                choose_photo();
+                break;
+            case R.id.forum_publish_photo_thumbnail1:
+                index = 1;
+                choose_photo();
+                break;
+            case R.id.forum_publish_photo_thumbnail2:
+                index = 2;
+                choose_photo();
+                break;
+            case R.id.forum_publish_commit:
                 content = publish_content.getText().toString();
                 title = publish_title.getText().toString();
                 type = String.valueOf(mAdapter.getPosition(mSpinner.getSelectedItem().toString())+1);
@@ -175,42 +171,13 @@ public class ForumPublishActivity extends BaseActivity{
                     img = img + img1 +";";
                 if(img2 != null)
                     img = img + img2 +";";
-
-                //new Thread(new MyThread()).start();
                 new MyAsyncTaskPostForumItem().execute();
-                refresh();
-            }
-        });
-    }
+                break;
 
-    private class textChange implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @TargetApi(Build.VERSION_CODES.M)
-        @Override
-        public void afterTextChanged(Editable s) {
-            boolean pt = publish_title.getText().length() > 0;
-            boolean pc = publish_content.getText().length() > 0;
-            if(pt&&pc) {
-                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
-                publish_commit.setClickable(true);
-            }
-            else {
-                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.gainsboro));
-                publish_commit.setClickable(false);
-            }
         }
     }
 
-    public void choose_photo(final int index) {
+    public void choose_photo() {
         new ActionSheetDialog(ForumPublishActivity.this).builder().setTitle("上传图片")
                 .setCancelable(false).setCanceledOnTouchOutside(true)
                 .addSheetItem("拍照上传", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
@@ -246,15 +213,13 @@ public class ForumPublishActivity extends BaseActivity{
         switch(requestCode){
             case 102:
                 if (resultCode == Activity.RESULT_OK) {
-                    File file = new File(imageFilePath);
-                    String extension = file.getName().substring(file.getName().lastIndexOf("."));
                     Bitmap bmp = BitmapFactory.decodeFile(imageFilePath);
-                    String forumId = UUID.randomUUID().toString();
-                    availableName =  "forum_" + forumId + extension;
+                    autoGenName = AutoGenerate.genName("forum", "jpg");
 
                     photoSelected(bmp);
 
                     filePath = imageFilePath;
+
                     new MyAsyncTaskUploadPicture().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
                     new MyAsyncTaskPostProgress().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
@@ -273,7 +238,7 @@ public class ForumPublishActivity extends BaseActivity{
                     }
                     // 这里开始的第二部分，获取图片的路径：
                     Cursor cursor = activity.getContentResolver().query(originalUri, null, null, null, null);
-                    String path = null;
+                    String path = "";
                     if (cursor != null) {
                         cursor.moveToFirst();
                         String document_id = cursor.getString(0);
@@ -290,9 +255,8 @@ public class ForumPublishActivity extends BaseActivity{
                     }
 
                     File file = new File(path);
-                    String extension = file.getName().substring(file.getName().lastIndexOf("."));
-                    String forumId = UUID.randomUUID().toString();
-                    availableName =  "forum_"+forumId+extension;
+                    String extension = file.getName().split("\\.")[1];
+                    autoGenName = AutoGenerate.genName("forum", extension);
 
                     photoSelected(bmp);
 
@@ -312,22 +276,19 @@ public class ForumPublishActivity extends BaseActivity{
         switch (index) {
             case 1:
                 iv_photo1.setImageBitmap(bmp);
-                img1 = availableName;
-                isChose1 =true;
+                img1 = autoGenName;
                 iv_photo2.setClickable(true);
                 iv_photo2.setImageResource(R.drawable.ic_control_point_black_80dp);
                 progress1.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 iv_photo2.setImageBitmap(bmp);
-                img2 = availableName;
-                isChose2 =true;
+                img2 = autoGenName;
                 progress2.setVisibility(View.VISIBLE);
                 break;
             default:
                 iv_photo.setImageBitmap(bmp);
-                img0 = availableName;
-                isChose =true;
+                img0 = autoGenName;
                 iv_photo1.setClickable(true);
                 iv_photo1.setImageResource(R.drawable.ic_control_point_black_80dp);
                 progress.setVisibility(View.VISIBLE);
@@ -336,26 +297,50 @@ public class ForumPublishActivity extends BaseActivity{
     }
 
     private void refresh() {
-        if(techForum.forumTypeSelector.getSelectedTabPosition() == Integer.parseInt(type)-1) {
-            techForum.relrefresh(Integer.parseInt(type)-1);
-        }
-        else
-            techForum.forumTypeSelector.getTabAt(Integer.parseInt(type)-1).select();
         finish();
+        techForum.forumTypeSelector.getTabAt(Integer.parseInt(type) - 1).select();
+    }
+
+    private class textChange implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @TargetApi(Build.VERSION_CODES.M)
+        @Override
+        public void afterTextChanged(Editable s) {
+            boolean pt = publish_title.getText().length() > 0;
+            boolean pc = publish_content.getText().length() > 0;
+            if (pt && pc) {
+                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
+                publish_commit.setClickable(true);
+            } else {
+                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.gainsboro));
+                publish_commit.setClickable(false);
+            }
+        }
     }
 
     private class MyAsyncTaskUploadPicture extends AsyncTask<Integer, String, String> {
         @Override
         protected String doInBackground(Integer... params) {
             File file = new File(filePath); //这里的path就是那个地址的全局变量
-            return UploadFileUtil.uploadImageFile(file, params[0], availableName.split("\\.")[0]);
+            return UploadFileUtil.uploadImageFile(file, params[0], autoGenName.split("\\.")[0]);
         }
 
         @Override
         protected void onPostExecute(String result) {
-            Toast toast = Toast.makeText(ForumPublishActivity.this,result,Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.BOTTOM,0,0);
-            toast.show();
+            if (!result.equals("上传成功！")) {
+                Toast toast = Toast.makeText(ForumPublishActivity.this, result, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM, 0, 0);
+                toast.show();
+            }
         }
 
     }
@@ -383,14 +368,20 @@ public class ForumPublishActivity extends BaseActivity{
     private class MyAsyncTaskPostProgress extends AsyncTask<Integer, Integer, Integer> {
         @Override
         protected Integer doInBackground(Integer... pages) {
-            String progressstr;
-            int progress = 0;
-            while(progress<100) {
-                progressstr = WebService.getFileUploadProgress();
-                if(!progressstr.equals(""))
-                    progress = Integer.parseInt(progressstr.substring(0, progressstr.indexOf("%")));
-                publishProgress(progress);
+            String progressStr = WebService.getFileUploadProgress();
+            int progress;
+            while (progressStr.equals("pending")) {
+                progressStr = WebService.getFileUploadProgress();
             }
+            publishProgress(0);
+            while (!progressStr.equals("finished")) {
+                progressStr = WebService.getFileUploadProgress();
+                if (progressStr.contains("%")) {
+                    progress = Integer.parseInt(progressStr.substring(0, progressStr.indexOf("%")));
+                    publishProgress(progress);
+                }
+            }
+            publishProgress(100);
             return null;
         }
 

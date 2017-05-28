@@ -10,7 +10,7 @@
     <string name="uconpass">再次输入密码</string>
     <string name="sign_in">登录</string>
     <string name="sign_up">注册</string>
-    <string name="sid">学号（可选）</string>
+    <string name="sid">学号</string>
     <string name="tel">手机号（可选）</string>
     <string name="forgot">忘记密码</string>
     <string name="usrMode">用户模式：</string>

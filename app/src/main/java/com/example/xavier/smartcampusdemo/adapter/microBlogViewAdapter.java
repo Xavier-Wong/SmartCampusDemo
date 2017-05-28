@@ -2,7 +2,6 @@ package com.example.xavier.smartcampusdemo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,20 +11,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.xavier.smartcampusdemo.R;
 import com.example.xavier.smartcampusdemo.activity.BlogDetailsActivity;
 import com.example.xavier.smartcampusdemo.entity.blog;
-import com.example.xavier.smartcampusdemo.R;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.xavier.smartcampusdemo.service.NetService.getAvatarPath;
 import static com.example.xavier.smartcampusdemo.service.NetService.getBlogPath;
-import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 
 /**
  * Created by Xavier on 3/23/2017.
@@ -181,16 +176,9 @@ public class microBlogViewAdapter extends RecyclerView.Adapter<RecyclerView.View
             if(blogItem.getImg().split(";")[a].contains("gif")) {
                 biHolder.sdv_img_tag.get(a).setVisibility(View.VISIBLE);
                 biHolder.sdv_img.get(a).setImageURI(getBlogPath()+blogItem.getImg().split(";")[a].split("\\.")[0]+".jpg");
-//                Uri lowResUri = Uri.parse(getBlogPath()+blogItem.getImg().split(";")[a].split("\\.")[0]+".jpg");
-//                uri = Uri.parse(getBlogPath() + blogItem.getImg().split(";")[a]);
-//                DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                        .setLowResImageRequest(ImageRequest.fromUri(lowResUri))
-//                        .setImageRequest(ImageRequest.fromUri(uri))
-//                        .setAutoPlayAnimations(true)
-//                        .build();
-//                biHolder.sdv_img.get(a).setController(controller);
             }
             else {
+                biHolder.sdv_img_tag.get(a).setVisibility(View.INVISIBLE);
                 biHolder.sdv_img.get(a).setImageURI(getBlogPath() + blogItem.getImg().split(";")[a]);
             }
         }

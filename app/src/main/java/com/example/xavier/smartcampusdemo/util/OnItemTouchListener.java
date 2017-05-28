@@ -38,7 +38,7 @@ public abstract class OnItemTouchListener implements RecyclerView.OnItemTouchLis
 
     }
 
-    public abstract void onItemClick(RecyclerView.ViewHolder vh);
+    abstract void onItemClick(RecyclerView.ViewHolder vh);
 
     private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override

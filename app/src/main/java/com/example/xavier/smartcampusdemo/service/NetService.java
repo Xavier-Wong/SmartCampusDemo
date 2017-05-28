@@ -29,9 +29,10 @@ public class NetService {
     private static String SERVERURL = "http://" + getIP() +"/HelloWeb/UploadFileStatusLet";
 
     public static String getIP() {
-        return "192.168.1.214:8080";
+//        return "192.168.1.214:8080";
 //        return "10.0.2.2:8080";
 //        return "xavier-hzw.me:8080";
+        return "122.114.31.144:8080";
     }
 
     public static String getRootPath() {

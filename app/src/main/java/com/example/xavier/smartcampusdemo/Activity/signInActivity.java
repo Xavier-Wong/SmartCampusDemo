@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.example.xavier.smartcampusdemo.R;
 import com.example.xavier.smartcampusdemo.service.UserInfoService;
 import com.example.xavier.smartcampusdemo.service.WebService;
+import com.example.xavier.smartcampusdemo.util.DisplayUtils;
 import com.example.xavier.smartcampusdemo.util.JSONUtil;
-import com.example.xavier.smartcampusdemo.util.UIUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,18 +32,20 @@ import org.json.JSONObject;
 
 public class SignInActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
 
+    Button sign_in;
+    TextView sign_up;
+    Handler handler = new Handler();
     private String info;
-
     private EditText usrName, usrPwd;
     private Button clear_username;
     private Button show_password;
-
-    Button sign_in;
-    TextView sign_up;
     private TextWatcher username_watcher, password_watcher;
     private ProgressDialog dialog;
 
-    Handler handler = new Handler();
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, SignInActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,21 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            show_password.setBackgroundResource(R.drawable.ic_password_show);
+            usrPwd.setInputType(InputType.TYPE_CLASS_TEXT);
+            usrPwd.setSelection(usrPwd.getText().toString().length());
+        }
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+            show_password.setBackgroundResource(R.drawable.ic_password_show);
+            usrPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            usrPwd.setSelection(usrPwd.getText().toString().length());
+        }
+        return false;
+    }
+
     private class MyThread implements Runnable {
         @Override
         public void run() {
@@ -131,11 +148,11 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     switch (info) {
                         case "noResponse": {
                             dialog.dismiss();
-                            UIUtils.customBottomShortToast(SignInActivity.this, "服务器未响应，请稍后再试", 0, 100);
+                            DisplayUtils.customBottomShortToast(SignInActivity.this, "服务器未响应，请稍后再试", 0, 100);
                             break;
                         }
                         case "": {
-                            UIUtils.customBottomShortToast(SignInActivity.this, "用户名或密码错误，请重新输入", 0, 100);
+                            DisplayUtils.customBottomShortToast(SignInActivity.this, "用户名或密码错误，请重新输入", 0, 100);
                             dialog.dismiss();
                             break;
                         }
@@ -153,7 +170,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                             }
                             editor.apply();
                             dialog.dismiss();
-                            UIUtils.customBottomShortToast(SignInActivity.this, "登陆成功", 0, 100);
+                            DisplayUtils.customBottomShortToast(SignInActivity.this, "登陆成功", 0, 100);
                             onlyActivity(MainActivity.class);
                             break;
                         }
@@ -161,25 +178,5 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 }
             });
         }
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
-            show_password.setBackgroundResource(R.drawable.ic_password_show);
-            usrPwd.setInputType(InputType.TYPE_CLASS_TEXT);
-            usrPwd.setSelection(usrPwd.getText().toString().length());
-        }
-        if(motionEvent.getAction()==MotionEvent.ACTION_UP){
-            show_password.setBackgroundResource(R.drawable.ic_password_show);
-            usrPwd.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            usrPwd.setSelection(usrPwd.getText().toString().length());
-        }
-        return false;
-    }
-
-    public static void actionStart(Context context) {
-        Intent intent = new Intent(context, SignInActivity.class);
-        context.startActivity(intent);
     }
 }

@@ -20,11 +20,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.example.xavier.smartcampusdemo.entity.user;
 import com.example.xavier.smartcampusdemo.R;
+import com.example.xavier.smartcampusdemo.entity.user;
 import com.example.xavier.smartcampusdemo.service.WebService;
+import com.example.xavier.smartcampusdemo.util.DisplayUtils;
 import com.example.xavier.smartcampusdemo.util.NetUtil.UploadFileUtil;
-import com.example.xavier.smartcampusdemo.util.UIUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,12 +40,26 @@ import zhangphil.iosdialog.widget.ActionSheetDialog;
 
 public class SignUpActivity extends BaseActivity implements View.OnClickListener {
 
-    String imageFilePath, filePath, availableName = "default.jpg";
+    String imageFilePath, filePath, availableName = "";
+    Handler handler = new Handler();
     private String info;
     private RadioButton rdMale, rdFemale;
     private EditText usrName, usrPwd, confirm_usrPws, usrEml, stuId, tel;
     private CircleImageView register_avatar;
-    Handler handler = new Handler();
+
+    public static boolean isNumeric(String str) {
+        for (int i = str.length(); --i >= 0; ) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void actionStart(Context context) {
+        Intent intent = new Intent(context, SignUpActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,31 +109,31 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
             case R.id.bt_sign_up:
                 if(usrName.getText().toString().equals("")) {
                     usrName.requestFocus();
-                    UIUtils.customTopShortToast(this,"账号不能为空",0,200);
+                    DisplayUtils.customTopShortToast(this, "账号不能为空", 0, 200);
                 }
                 else if(usrPwd.getText().toString().equals("")) {
                     usrPwd.requestFocus();
-                    UIUtils.customTopShortToast(this,"密码不能为空",0,200);
+                    DisplayUtils.customTopShortToast(this, "密码不能为空", 0, 200);
                 }
                 else if(!confirm_usrPws.getText().toString().equals(usrPwd.getText().toString())) {
                     confirm_usrPws.requestFocus();
-                    UIUtils.customTopShortToast(this,"两次密码不匹配",0,200);
+                    DisplayUtils.customTopShortToast(this, "两次密码不匹配", 0, 200);
                 }
                 else if(usrEml.getText().toString().equals("")) {
                     usrEml.requestFocus();
-                    UIUtils.customTopShortToast(this,"邮箱不能为空",0,200);
+                    DisplayUtils.customTopShortToast(this, "邮箱不能为空", 0, 200);
                 }
                 else if(stuId.getText().toString().equals("")) {
                     stuId.requestFocus();
-                    UIUtils.customTopShortToast(this,"学号不能为空",0,200);
+                    DisplayUtils.customTopShortToast(this, "学号不能为空", 0, 200);
                 }
                 else if(!isNumeric(stuId.getText().toString())) {
                     stuId.requestFocus();
-                    UIUtils.customTopShortToast(this,"学号格式错误",0,200);
+                    DisplayUtils.customTopShortToast(this, "学号格式错误", 0, 200);
                 }
                 else if(!isNumeric(tel.getText().toString())) {
                     tel.requestFocus();
-                    UIUtils.customTopShortToast(this,"电话号码格式错误",0,200);
+                    DisplayUtils.customTopShortToast(this, "电话号码格式错误", 0, 200);
                 }
                 else {
                     new Thread(new MyThread()).start();
@@ -232,15 +246,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public static boolean isNumeric(String str){
-        for (int i = str.length();--i>=0;){
-            if (!Character.isDigit(str.charAt(i))){
-                return false;
-            }
-        }
-        return true;
-    }
-
     private class MyThread implements Runnable {
         @Override
         public void run() {
@@ -264,24 +269,19 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                 public void run() {
                     switch (info) {
                         case "noResponse":
-                            UIUtils.customBottomShortToast(SignUpActivity.this, "服务器未响应，请稍后再试", 0, 100);
+                            DisplayUtils.customBottomShortToast(SignUpActivity.this, "服务器未响应，请稍后再试", 0, 100);
                             break;
                         case "注册成功":
-                            UIUtils.customBottomShortToast(SignUpActivity.this, "注册成功", 0, 100);
+                            DisplayUtils.customBottomShortToast(SignUpActivity.this, "注册成功", 0, 100);
                             finish();
                             break;
                         case "注册失败":
-                            UIUtils.customBottomShortToast(SignUpActivity.this, "注册失败", 0, 100);
+                            DisplayUtils.customBottomShortToast(SignUpActivity.this, "注册失败", 0, 100);
                             break;
                     }
 
                 }
             });
         }
-    }
-
-    public static void actionStart(Context context) {
-        Intent intent = new Intent(context, SignUpActivity.class);
-        context.startActivity(intent);
     }
 }

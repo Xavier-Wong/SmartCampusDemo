@@ -1,6 +1,5 @@
 package com.example.xavier.smartcampusdemo.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -10,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,45 +27,54 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.xavier.smartcampusdemo.R;
+import com.example.xavier.smartcampusdemo.entity.blog;
 import com.example.xavier.smartcampusdemo.fragment.microBlog;
+import com.example.xavier.smartcampusdemo.service.BlogItemService;
+import com.example.xavier.smartcampusdemo.service.WebService;
+import com.example.xavier.smartcampusdemo.util.AutoGenerate;
 import com.example.xavier.smartcampusdemo.util.NetUtil.UploadFileUtil;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Properties;
-import java.util.UUID;
 
 import zhangphil.iosdialog.widget.ActionSheetDialog;
-
-import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 
 /**
  * Created by Xavier on 4/5/2017.
  *
  */
 
-public class BlogPublishActivity extends BaseActivity{
+public class BlogPublishActivity extends BaseActivity implements View.OnClickListener {
 
-    private boolean isChose = false, isChose1 = false, isChose2 = false;
-    String imageFilePath, filePath, availableName;
-    private String p_uid, p_content, p_img, img0, img1, img2;
     SharedPreferences sharedPreferences;
+    /*提交*/
     TextView publish_commit;
+    /*文本输入*/
     EditText publish_content;
+    String imageFilePath, //拍照储存路径
+            filePath; //上传照片本地路径
+    String autoGenName; //自动生成名字
+    String img0, img1, img2; //每张图片文件名
     ImageView iv_photo, iv_photo1, iv_photo2;
-    private int index;
-
+    View progress, progress1, progress2;
+    NumberProgressBar progressBar, progressBar1, progressBar2;
+    Activity activity;
     Toolbar toolbar;
+    private String uid, content, img;
+    /*图片上传*/
+    private int index; //选中第几框
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.microblog_publish);
+        activity = this;
+
+        sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
+        uid = sharedPreferences.getString("userID", "");
+
         toolbar = (Toolbar) findViewById(R.id.blog_publish_toolbar);
         assert toolbar != null;
         toolbar.setTitle("");
@@ -95,74 +104,64 @@ public class BlogPublishActivity extends BaseActivity{
 
         publish_content = (EditText) findViewById(R.id.blog_publish_content);
         publish_commit = (TextView) findViewById(R.id.blog_publish_commit);
+
         iv_photo = (ImageView) findViewById(R.id.blog_publish_photo_thumbnail);
         iv_photo1 = (ImageView) findViewById(R.id.blog_publish_photo_thumbnail1);
         iv_photo2 = (ImageView) findViewById(R.id.blog_publish_photo_thumbnail2);
-        iv_photo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index = 0;
-                choose_photo(index);
-            }
-        });
-        iv_photo1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index = 1;
-                choose_photo(index);
-            }
-        });
-        iv_photo2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                index = 2;
-                choose_photo(index);
-            }
-        });
+
+        progress = findViewById(R.id.blog_pic_progress);
+        progress1 = findViewById(R.id.blog_pic_progress1);
+        progress2 = findViewById(R.id.blog_pic_progress2);
+
+        progressBar = (NumberProgressBar) findViewById(R.id.blog_pic_progress_bar);
+        progressBar1 = (NumberProgressBar) findViewById(R.id.blog_pic_progress_bar1);
+        progressBar2 = (NumberProgressBar) findViewById(R.id.blog_pic_progress_bar2);
+
+        textChange tc = new textChange();
+        publish_content.addTextChangedListener(tc);
+
+        iv_photo.setOnClickListener(this);
+        iv_photo1.setOnClickListener(this);
+        iv_photo2.setOnClickListener(this);
+        publish_commit.setOnClickListener(this);
+
         iv_photo1.setClickable(false);
         iv_photo2.setClickable(false);
-        publish_content.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        publish_commit.setClickable(false);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().length()>0) {
-                    publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
-                    publish_commit.setClickable(true);
-                }
-                else {
-                    publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.gainsboro));
-                    publish_commit.setClickable(false);
-                }
-            }
-        });
-        publish_commit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
-                p_uid = sharedPreferences.getString("userID","");
-                p_content = publish_content.getText().toString();
-                p_img = "";
-                if(img0 != null)
-                    p_img = p_img + img0 +";";
-                if(img1 != null)
-                    p_img = p_img + img1 +";";
-                if(img2 != null)
-                    p_img = p_img + img2 +";";
-                new Thread(new MyThread()).start();
-                refresh();
-            }
-        });
     }
 
-    public void choose_photo(final int index) {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.blog_publish_photo_thumbnail:
+                index = 0;
+                choose_photo();
+                break;
+            case R.id.blog_publish_photo_thumbnail1:
+                index = 1;
+                choose_photo();
+                break;
+            case R.id.blog_publish_photo_thumbnail2:
+                index = 2;
+                choose_photo();
+                break;
+            case R.id.blog_publish_commit:
+                content = publish_content.getText().toString();
+                img = "";
+                if(img0 != null)
+                    img = img + img0 + ";";
+                if(img1 != null)
+                    img = img + img1 + ";";
+                if(img2 != null)
+                    img = img + img2 + ";";
+                new MyAsyncTaskPostBlogItem().execute();
+                break;
+
+        }
+    }
+
+    public void choose_photo() {
         new ActionSheetDialog(BlogPublishActivity.this).builder().setTitle("上传图片")
                 .setCancelable(false).setCanceledOnTouchOutside(true)
                 .addSheetItem("拍照上传", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
@@ -183,14 +182,14 @@ public class BlogPublishActivity extends BaseActivity{
                         startActivityForResult(intent1, 102);
                     }
                 }).addSheetItem("相册选择", ActionSheetDialog.SheetItemColor.Blue, new ActionSheetDialog.OnSheetItemClickListener() {
-                    @Override
-                    public void onClick(int which) {
-                        // 相册选取
-                        Intent intent2 = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent2.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-                        startActivityForResult(intent2, 103);
-                    }
-                }).show();
+            @Override
+            public void onClick(int which) {
+                // 相册选取
+                Intent intent2 = new Intent(Intent.ACTION_GET_CONTENT);
+                intent2.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent2, 103);
+            }
+        }).show();
     }
 
     @Override
@@ -198,154 +197,188 @@ public class BlogPublishActivity extends BaseActivity{
         switch(requestCode){
             case 102:
                 if (resultCode == Activity.RESULT_OK) {
-                    File file = new File(imageFilePath);
-                    String extension = file.getName().substring(file.getName().lastIndexOf("."));
                     Bitmap bmp = BitmapFactory.decodeFile(imageFilePath);
-                    String blogId = UUID.randomUUID().toString();
-                    availableName =  "blog_" + blogId + extension;
-                    switch (index) {
-                        case 1:
-                            iv_photo1.setImageBitmap(bmp);
-                            img1 = availableName;
-                            isChose1 =true;
-                            iv_photo2.setClickable(true);
-                            iv_photo2.setImageResource(R.drawable.ic_control_point_black_80dp);
-                            break;
-                        case 2:
-                            iv_photo2.setImageBitmap(bmp);
-                            img2 = availableName;
-                            isChose2 =true;
-                            break;
-                        default:
-                            iv_photo.setImageBitmap(bmp);
-                            img0 = availableName;
-                            isChose =true;
-                            iv_photo1.setClickable(true);
-                            iv_photo1.setImageResource(R.drawable.ic_control_point_black_80dp);
-                            break;
-                    }
+                    autoGenName = AutoGenerate.genName("blog", "jpg");
+
+                    photoSelected(bmp);
+
                     filePath = imageFilePath;
-                    new Thread(new UploadThread(0)).start();
+
+                    new MyAsyncTaskUploadPicture().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+                    new MyAsyncTaskPostProgress().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 break;
             case 103:
                 if (resultCode == Activity.RESULT_OK) {
-                    Bitmap bm = null;
+                    Bitmap bmp = null;
                     // 外界的程序访问ContentProvider所提供数据 可以通过ContentResolver接口
                     ContentResolver resolver = getContentResolver();
                     Uri originalUri = data.getData(); // 获得图片的uri
 
                     try {
-                        bm = MediaStore.Images.Media.getBitmap(resolver, originalUri); // 显得到bitmap图片
+                        bmp = MediaStore.Images.Media.getBitmap(resolver, originalUri); // 显得到bitmap图片
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     // 这里开始的第二部分，获取图片的路径：
 
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    @SuppressWarnings("deprecation")
-                    Cursor cursor = managedQuery(originalUri, proj, null, null, null);
-                    // 按我个人理解 这个是获得用户选择的图片的索引值
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    // 将光标移至开头 ，这个很重要，不小心很容易引起越界
-                    cursor.moveToFirst();
-                    // 最后根据索引值获取图片路径
-                    String path = cursor.getString(column_index);
-                    File file = new File(path);
-                    String extension = file.getName().substring(file.getName().lastIndexOf("."));
-                    String blogId = UUID.randomUUID().toString();
-                    availableName =  "blog_"+blogId+extension;
-
-                    switch (index) {
-                        case 1:
-                            iv_photo1.setImageBitmap(bm);
-                            img1 = availableName;
-                            isChose1 =true;
-                            iv_photo2.setClickable(true);
-                            iv_photo2.setImageResource(R.drawable.ic_control_point_black_80dp);
-                            break;
-                        case 2:
-                            iv_photo2.setImageBitmap(bm);
-                            img2 = availableName;
-                            isChose2 =true;
-                            break;
-                        default:
-                            iv_photo.setImageBitmap(bm);
-                            img0 = availableName;
-                            isChose =true;
-                            iv_photo1.setClickable(true);
-                            iv_photo1.setImageResource(R.drawable.ic_control_point_black_80dp);
-                            break;
+                    Cursor cursor = activity.getContentResolver().query(originalUri, null, null, null, null);
+                    String path = "";
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        String document_id = cursor.getString(0);
+                        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+                        cursor.close();
+                        cursor = activity.getContentResolver().query(
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                null, MediaStore.Images.Media._ID + " = ? ", new String[]{document_id}, null);
+                        if (cursor != null) {
+                            cursor.moveToFirst();
+                            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                            cursor.close();
+                        }
                     }
+
+                    File file = new File(path);
+                    String extension = file.getName().split("\\.")[1];
+                    autoGenName = AutoGenerate.genName("blog", extension);
+
+                    photoSelected(bmp);
 
                     filePath = path;
                     if(extension.contains("gif")) {
-                        new Thread(new UploadThread(2)).start();
+                        new MyAsyncTaskUploadPicture().execute(2);
                     }
-                    new Thread(new UploadThread(0)).start();
+                    new MyAsyncTaskUploadPicture().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+                    new MyAsyncTaskPostProgress().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
                 break;
         }
         super.onActivityResult(requestCode,resultCode,data);
     }
 
-    private class UploadThread implements Runnable {
-        Integer type;
-
-        UploadThread(Integer type) {
-            this.type = type;
-        }
-        @Override
-        public void run() {
-            if(filePath != null) {
-                File file = new File(filePath); //这里的path就是那个地址的全局变量
-                String result = UploadFileUtil.uploadImageFile(file, type, availableName.split("\\.")[0]);
-                Toast toast = Toast.makeText(BlogPublishActivity.this,result,Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.BOTTOM,0,0);
-                toast.show();
-            }
-        }
-    }
-    private class MyThread implements Runnable {
-
-        @Override
-        public void run() {
-            Properties properties = System.getProperties();
-            properties.list(System.out);
-            String url = "http://" + getIP() + "/HelloWeb/BlogPublishLet";
-            try {
-                HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
-                conn.setReadTimeout(3000);
-                conn.setRequestMethod("POST");
-
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                PrintWriter printWriter = new PrintWriter(conn.getOutputStream());
-                String post = "action=1&uid="+p_uid+"&content="+p_content+"&img="+p_img;
-                printWriter.write(post);
-                printWriter.flush();
-                BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                int len;
-                byte[] arr = new byte[1024];
-                while ((len=bis.read(arr))!= -1) {
-                    bos.write(arr,0,len);
-                    bos.flush();
-                }
-                bos.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    void photoSelected(Bitmap bmp) {
+        switch (index) {
+            case 1:
+                iv_photo1.setImageBitmap(bmp);
+                img1 = autoGenName;
+                iv_photo2.setClickable(true);
+                iv_photo2.setImageResource(R.drawable.ic_control_point_black_80dp);
+                progress1.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                iv_photo2.setImageBitmap(bmp);
+                img2 = autoGenName;
+                progress2.setVisibility(View.VISIBLE);
+                break;
+            default:
+                iv_photo.setImageBitmap(bmp);
+                img0 = autoGenName;
+                iv_photo1.setClickable(true);
+                iv_photo1.setImageResource(R.drawable.ic_control_point_black_80dp);
+                progress.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
     private void refresh() {
-        microBlog.refresh();
         finish();
-//        Intent intent = new Intent(BlogPublishActivity.this, MainActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        intent.putExtra("isPublished",true);
-//        startActivity(intent);
+        microBlog.refresh();
+    }
+
+    private class textChange implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.toString().length() > 0) {
+                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.colorPrimary));
+                publish_commit.setClickable(true);
+            } else {
+                publish_commit.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.gainsboro));
+                publish_commit.setClickable(false);
+            }
+        }
+    }
+
+    private class MyAsyncTaskUploadPicture extends AsyncTask<Integer, String, String> {
+        @Override
+        protected String doInBackground(Integer... params) {
+            File file = new File(filePath); //这里的path就是那个地址的全局变量
+            return UploadFileUtil.uploadImageFile(file, params[0], autoGenName.split("\\.")[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (!result.equals("上传成功！")) {
+                Toast toast = Toast.makeText(BlogPublishActivity.this, result, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM, 0, 0);
+                toast.show();
+            }
+        }
+
+    }
+
+    private class MyAsyncTaskPostBlogItem extends AsyncTask<Integer, String, String> {
+        @Override
+        protected String doInBackground(Integer... pages) {
+            blog blog = new blog();
+            blog.setU_id(Integer.parseInt(uid));
+            blog.setContent(content);
+            blog.setImg(img);
+            return BlogItemService.executePost(blog);
+        }
+
+        @Override
+        protected void onPostExecute(String state) {
+            if (state.equals("发布成功")) {
+                refresh();
+            }
+        }
+    }
+
+    private class MyAsyncTaskPostProgress extends AsyncTask<Integer, Integer, Integer> {
+        @Override
+        protected Integer doInBackground(Integer... pages) {
+            String progressStr = WebService.getFileUploadProgress();
+            int progress;
+            while (progressStr.equals("pending")) {
+                progressStr = WebService.getFileUploadProgress();
+            }
+            publishProgress(0);
+            while (!progressStr.equals("finished")) {
+                progressStr = WebService.getFileUploadProgress();
+                if (progressStr.contains("%")) {
+                    progress = Integer.parseInt(progressStr.substring(0, progressStr.indexOf("%")));
+                    publishProgress(progress);
+                }
+            }
+            publishProgress(100);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            switch (index) {
+                case 1:
+                    progressBar1.setProgress(values[0]);
+                    break;
+                case 2:
+                    progressBar2.setProgress(values[0]);
+                    break;
+                case 0:
+                    progressBar.setProgress(values[0]);
+                    break;
+            }
+        }
     }
 }

@@ -17,10 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +31,6 @@ import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -48,18 +44,32 @@ import static com.example.xavier.smartcampusdemo.util.NetUtil.NetUtil.isNetworkA
 
 public class techForum extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    View popView;
-    PopupWindow popWindow;
     public static TabLayout forumTypeSelector;
     public static int ALL = 1;
-    private static techForumViewAdapter adapter;
-    RecyclerView mRecyclerView;
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    private static boolean isLoading = true;
-    private Activity activity;
     public static int page = 0;
     public static int type = ALL;
+    private static techForumViewAdapter adapter;
+    private static boolean isLoading = true;
     private static boolean noMore = false;
+    View popView;
+    PopupWindow popWindow;
+    RecyclerView mRecyclerView;
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    String TAG = "FragmentCheck" + getClass().getSimpleName();
+    boolean isDestroyView = false;
+    private Activity activity;
+
+    public static void refresh() {
+        adapter.removeAll();
+        noMore = false;
+        page = 0;
+        new MyAsyncTaskGetForumItem().execute(page, type);
+    }
+
+    public static void relrefresh(int ntype) {
+        type = ntype;
+        refresh();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -157,6 +167,7 @@ public class techForum extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                techForum.refresh();
 
             }
         });
@@ -223,46 +234,6 @@ public class techForum extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     }
 
-    public static void refresh() {
-        adapter.removeAll();
-        noMore = false;
-        page = 0;
-        new MyAsyncTaskGetForumItem().execute(page, type);
-    }
-
-    public static void relrefresh(int ntype) {
-        type = ntype;
-        refresh();
-    }
-
-    private static class MyAsyncTaskGetForumItem extends AsyncTask<Integer, String, List<forum>> {
-        @Override
-        protected List<forum> doInBackground(Integer... params) {
-            return ForumItemService.getForumItems(params[0], params[1]);
-        }
-
-        @Override
-        protected void onPostExecute(List<forum> forumItems) {
-            if(forumItems.size()>0) {
-                adapter.addForumItem(forumItems);
-                adapter.notifyDataSetChanged();
-                page++;
-            }
-            if(forumItems.size()<10 && !noMore) {
-                adapter.notifyEnd();
-                if(page == 0) {
-                    adapter.notifyNone();
-                    adapter.notifyDataSetChanged();
-                }
-                noMore = true;
-            }
-            isLoading = false;
-        }
-
-    }
-    String TAG = "FragmentCheck"+getClass().getSimpleName();
-    boolean isDestroyView = false;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -313,6 +284,32 @@ public class techForum extends Fragment implements SwipeRefreshLayout.OnRefreshL
         isDestroyView = true;
         adapter.removeAll();
         page = 0;
+    }
+
+    private static class MyAsyncTaskGetForumItem extends AsyncTask<Integer, String, List<forum>> {
+        @Override
+        protected List<forum> doInBackground(Integer... params) {
+            return ForumItemService.getForumItems(params[0], params[1]);
+        }
+
+        @Override
+        protected void onPostExecute(List<forum> forumItems) {
+            if (forumItems.size() > 0) {
+                adapter.addForumItem(forumItems);
+                adapter.notifyDataSetChanged();
+                page++;
+            }
+            if (forumItems.size() < 10 && !noMore) {
+                adapter.notifyEnd();
+                if (page == 0) {
+                    adapter.notifyNone();
+                    adapter.notifyDataSetChanged();
+                }
+                noMore = true;
+            }
+            isLoading = false;
+        }
+
     }
 
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.xavier.smartcampusdemo.R;
 import com.example.xavier.smartcampusdemo.activity.ForumsDetailsActivity;
 import com.example.xavier.smartcampusdemo.entity.forum;
-import com.example.xavier.smartcampusdemo.R;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.xavier.smartcampusdemo.service.NetService.getForumPath;
-import static com.example.xavier.smartcampusdemo.service.NetService.getIP;
 import static com.example.xavier.smartcampusdemo.util.TimeConvertor.timeToNow;
 
 /**
@@ -38,8 +34,6 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int TYPE_PIC = 1;
     private static final int TYPE_FOOTER = 2;  //说明是带有Footer的
     private static final int TYPE_ERROR = 3;
-
-
 
     private List<forum> forumItems;
     private Context context;
@@ -174,16 +168,11 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         Uri uri = Uri.parse(getForumPath()+forumItem.getImg());
         if(forumItem.getImg().contains("gif")) {
             fiHolder.forumItemPicTag.setVisibility(View.VISIBLE);
-//            DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                    .setUri(uri)
-//                    .setAutoPlayAnimations(false)
-//                    .build();
-//            fiHolder.forumItemPic.setController(controller);
-
             fiHolder.forumItemPic.setImageURI(getForumPath()+forumItem.getImg().split("\\.")[0]+".jpg");
+        } else {
+            fiHolder.forumItemPicTag.setVisibility(View.INVISIBLE);
+            fiHolder.forumItemPic.setImageURI(getForumPath() + forumItem.getImg());
         }
-        else
-            fiHolder.forumItemPic.setImageURI(getForumPath()+forumItem.getImg());
 
     }
 
@@ -231,10 +220,6 @@ public class techForumViewAdapter extends RecyclerView.Adapter<RecyclerView.View
             Intent intent;
             switch (v.getId()) {
                 case R.id.forum_normal_container:
-                    intent = new Intent(context, ForumsDetailsActivity.class);
-                    intent.putExtra("url", String.valueOf(getForumItems().get(getAdapterPosition()).getF_id()));
-                    context.startActivity(intent);
-                    break;
                 case R.id.forum_wtpic_container:
                     intent = new Intent(context, ForumsDetailsActivity.class);
                     intent.putExtra("url", String.valueOf(getForumItems().get(getAdapterPosition()).getF_id()));

@@ -12,13 +12,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,24 +27,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.xavier.smartcampusdemo.R;
 import com.example.xavier.smartcampusdemo.adapter.blogDetailsViewAdapter;
 import com.example.xavier.smartcampusdemo.entity.blog;
 import com.example.xavier.smartcampusdemo.entity.blog_reply;
-import com.example.xavier.smartcampusdemo.R;
 import com.example.xavier.smartcampusdemo.service.BlogItemService;
 import com.example.xavier.smartcampusdemo.util.ColorUtils;
-import com.example.xavier.smartcampusdemo.util.UIUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.example.xavier.smartcampusdemo.util.DisplayUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static com.example.xavier.smartcampusdemo.util.NetUtil.NetUtil.isNetworkAvailable;
 
 /**
  * Created by Xavier on 5/1/2017.
@@ -55,33 +49,125 @@ import static com.example.xavier.smartcampusdemo.util.NetUtil.NetUtil.isNetworkA
 
 public class BlogDetailsActivity extends SwipeBackActivity implements View.OnClickListener {
 
-    private SharedPreferences sharedPreferences;
     private static blogDetailsViewAdapter adapter;
-
     blog blog;
-    private Toolbar toolbar;
-
     EditText et_reply_content;
     ImageView iv_reply_send;
     View popView;
     PopupWindow popWindow;
-
-
+    Activity activity;
+    private SharedPreferences sharedPreferences;
+    private Toolbar toolbar;
     private String bid, uid, content;
     private String to_send = "";
     private boolean isLoading = true;
     private boolean noMore = false;
     private Integer page = 0;
-
     private TextView tv_comment_count;
     private TextView tv_like_count;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                tv_comment_count.setText(String.valueOf(blog.getReply_count()));
+                tv_like_count.setText(String.valueOf(blog.getLike()));
+                final LinearLayout tvStickyHeaderView = (LinearLayout) findViewById(R.id.blog_reply_sticker);
+                //tvStickyHeaderView.setOnClickListener(BlogDetailsActivity.this);
 
-    Activity activity;
+//                tv_author.setText(blog.getAuthor());
+//                tv_time.setText(blog.getTime());
+//                tv_content.setText(blog.getContent());
+//
+//                civ_avatar.setImageURI("http://"+getIP()+"/HelloWeb/Upload/Avatar/"+blog.getAvatar());
+//                if(blog.getImg().contains(";")) {
+//                    Uri uri;
+//                    for(int a = 0; a < blog.getImg().split(";").length; a++) {
+//                        if(blog.getImg().split(";")[a].contains("gif")) {
+//                            uri = Uri.parse("http://" + getIP() + "/HelloWeb/Upload/Blog/" + blog.getImg().split(";")[a]);
+//                            DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                                    .setUri(uri)
+//                                    .setAutoPlayAnimations(true)
+//                                    .build();
+//                            sdv_img.get(a).setController(controller);
+//                        }
+//                        else {
+//                            uri = Uri.parse("http://" + getIP() + "/HelloWeb/Upload/Blog/" + blog.getImg().split(";")[a]);
+//                            sdv_img.get(a).setImageURI(uri);
+//                        }
+//                    }
+//                }
+
+                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity);
+                adapter = new blogDetailsViewAdapter(activity, null);
+
+                RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.blog_reply_rv);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mRecyclerView.setHasFixedSize(true);
+                mRecyclerView.setAdapter(adapter);
+
+                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    //
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        int firstVisibleItems, visibleItemCount, totalItemCount;
+                        visibleItemCount = mLayoutManager.getChildCount();
+                        totalItemCount = mLayoutManager.getItemCount();
+                        firstVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                        View stickyInfoView = recyclerView.findChildViewUnder(
+                                tvStickyHeaderView.getMeasuredWidth() / 2, 5);
+
+                        if (stickyInfoView != null && stickyInfoView.getContentDescription() != null) {
+
+                        }
+
+                        View transInfoView = recyclerView.findChildViewUnder(
+                                tvStickyHeaderView.getMeasuredWidth() / 2, tvStickyHeaderView.getMeasuredHeight() + 1);
+
+                        if (transInfoView != null && transInfoView.getTag() != null) {
+
+                            int transViewStatus = (int) transInfoView.getTag();
+                            int dealtY = transInfoView.getTop() - tvStickyHeaderView.getMeasuredHeight();
+
+                            if (transViewStatus == blogDetailsViewAdapter.HAS_STICKY_VIEW) {
+                                if (transInfoView.getTop() > 0) {
+                                    tvStickyHeaderView.setTranslationY(dealtY);
+                                    if (tvStickyHeaderView.getVisibility() == View.VISIBLE)
+                                        tvStickyHeaderView.setVisibility(View.GONE);
+                                } else {
+                                    tvStickyHeaderView.setTranslationY(0);
+                                    if (tvStickyHeaderView.getVisibility() == View.GONE)
+                                        tvStickyHeaderView.setVisibility(View.VISIBLE);
+                                }
+                            } else if (transViewStatus == blogDetailsViewAdapter.NONE_STICKY_VIEW) {
+                                tvStickyHeaderView.setTranslationY(0);
+                            } else if (transViewStatus == blogDetailsViewAdapter.FIRST_STICKY_VIEW) {
+                                if (tvStickyHeaderView.getVisibility() == View.VISIBLE)
+                                    tvStickyHeaderView.setVisibility(View.GONE);
+                            }
+                        }
+
+                        if ((visibleItemCount + firstVisibleItems) >= totalItemCount && !isLoading) {
+                            // 判断点
+                            if (!noMore) {
+                                isLoading = true;
+                                new MyAsyncTaskGetBlogCommentItem().execute(page);
+                            }
+                        }
+                    }
+                });
+                adapter.setDetailsObject(blog);
+                new MyAsyncTaskGetBlogCommentItem().execute(page);
+            }
+        }
+    };
 
     boolean isLogged() {
         sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
         return !sharedPreferences.getAll().isEmpty();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,29 +254,6 @@ public class BlogDetailsActivity extends SwipeBackActivity implements View.OnCli
         }
     }
 
-    private class textChange implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if(s.toString().length()>0) {
-                iv_reply_send.setBackgroundColor(ColorUtils.getColor(BlogDetailsActivity.this ,R.color.customblue));
-                iv_reply_send.setClickable(true);
-            }
-            else {
-                iv_reply_send.setBackgroundColor(ColorUtils.getColor(BlogDetailsActivity.this ,R.color.gainsboro));
-                iv_reply_send.setClickable(false);
-            }
-        }
-    }
-
     void initPopupWindow() {
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
@@ -220,6 +283,39 @@ public class BlogDetailsActivity extends SwipeBackActivity implements View.OnCli
         popWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
+    void refresh() {
+        tv_comment_count.setText(String.valueOf(blog.getReply_count()));
+        tv_like_count.setText(String.valueOf(blog.getLike()));
+        isLoading = true;
+        adapter.removeAll();
+        adapter.setDetailsObject(blog);
+        noMore = false;
+        page = 0;
+        new MyAsyncTaskGetBlogCommentItem().execute(page);
+    }
+
+    private class textChange implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.toString().length() > 0) {
+                iv_reply_send.setBackgroundColor(ColorUtils.getColor(BlogDetailsActivity.this, R.color.customblue));
+                iv_reply_send.setClickable(true);
+            } else {
+                iv_reply_send.setBackgroundColor(ColorUtils.getColor(BlogDetailsActivity.this, R.color.gainsboro));
+                iv_reply_send.setClickable(false);
+            }
+        }
+    }
+
     private class InitialThread extends Thread {
 
         @Override
@@ -231,116 +327,6 @@ public class BlogDetailsActivity extends SwipeBackActivity implements View.OnCli
                 handler.sendMessage(msg);
             }
         }
-    }
-
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what == 1) {
-                tv_comment_count.setText(String.valueOf(blog.getReply_count()));
-                tv_like_count.setText(String.valueOf(blog.getLike()));
-                final LinearLayout tvStickyHeaderView = (LinearLayout) findViewById(R.id.blog_reply_sticker);
-                //tvStickyHeaderView.setOnClickListener(BlogDetailsActivity.this);
-
-//                tv_author.setText(blog.getAuthor());
-//                tv_time.setText(blog.getTime());
-//                tv_content.setText(blog.getContent());
-//
-//                civ_avatar.setImageURI("http://"+getIP()+"/HelloWeb/Upload/Avatar/"+blog.getAvatar());
-//                if(blog.getImg().contains(";")) {
-//                    Uri uri;
-//                    for(int a = 0; a < blog.getImg().split(";").length; a++) {
-//                        if(blog.getImg().split(";")[a].contains("gif")) {
-//                            uri = Uri.parse("http://" + getIP() + "/HelloWeb/Upload/Blog/" + blog.getImg().split(";")[a]);
-//                            DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                                    .setUri(uri)
-//                                    .setAutoPlayAnimations(true)
-//                                    .build();
-//                            sdv_img.get(a).setController(controller);
-//                        }
-//                        else {
-//                            uri = Uri.parse("http://" + getIP() + "/HelloWeb/Upload/Blog/" + blog.getImg().split(";")[a]);
-//                            sdv_img.get(a).setImageURI(uri);
-//                        }
-//                    }
-//                }
-
-                final LinearLayoutManager mLayoutManager = new LinearLayoutManager(activity);
-                adapter = new blogDetailsViewAdapter(activity, null);
-
-                RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.blog_reply_rv);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                mRecyclerView.setHasFixedSize(true);
-                mRecyclerView.setAdapter(adapter);
-
-                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//
-                    @Override
-                    public void onScrolled(RecyclerView recyclerView,int dx, int dy) {
-                        int firstVisibleItems, visibleItemCount, totalItemCount;
-                        visibleItemCount = mLayoutManager.getChildCount();
-                        totalItemCount = mLayoutManager.getItemCount();
-                        firstVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                        View stickyInfoView = recyclerView.findChildViewUnder(
-                                tvStickyHeaderView.getMeasuredWidth() / 2, 5);
-
-                        if (stickyInfoView != null && stickyInfoView.getContentDescription() != null) {
-
-                        }
-
-                        View transInfoView = recyclerView.findChildViewUnder(
-                                tvStickyHeaderView.getMeasuredWidth() / 2, tvStickyHeaderView.getMeasuredHeight() + 1);
-
-                        if (transInfoView != null && transInfoView.getTag() != null) {
-
-                            int transViewStatus = (int) transInfoView.getTag();
-                            int dealtY = transInfoView.getTop() - tvStickyHeaderView.getMeasuredHeight();
-
-                            if (transViewStatus == blogDetailsViewAdapter.HAS_STICKY_VIEW) {
-                                if (transInfoView.getTop() > 0) {
-                                    tvStickyHeaderView.setTranslationY(dealtY);
-                                    if(tvStickyHeaderView.getVisibility()==View.VISIBLE)
-                                        tvStickyHeaderView.setVisibility(View.GONE);
-                                } else {
-                                    tvStickyHeaderView.setTranslationY(0);
-                                    if(tvStickyHeaderView.getVisibility()==View.GONE)
-                                        tvStickyHeaderView.setVisibility(View.VISIBLE);
-                                }
-                            } else if (transViewStatus == blogDetailsViewAdapter.NONE_STICKY_VIEW) {
-                                tvStickyHeaderView.setTranslationY(0);
-                            }
-                            else if (transViewStatus == blogDetailsViewAdapter.FIRST_STICKY_VIEW) {
-                                if(tvStickyHeaderView.getVisibility()==View.VISIBLE)
-                                    tvStickyHeaderView.setVisibility(View.GONE);
-                            }
-                        }
-
-                        if ((visibleItemCount + firstVisibleItems) >= totalItemCount && !isLoading) {
-                            // 判断点
-                            if(!noMore) {
-                                isLoading = true;
-                                new MyAsyncTaskGetBlogCommentItem().execute(page);
-                            }
-                        }
-                    }
-                });
-                adapter.setDetailsObject(blog);
-                new MyAsyncTaskGetBlogCommentItem().execute(page);
-            }
-        }
-    };
-
-    void refresh() {
-        tv_comment_count.setText(String.valueOf(blog.getReply_count()));
-        tv_like_count.setText(String.valueOf(blog.getLike()));
-        isLoading = true;
-        adapter.removeAll();
-        adapter.setDetailsObject(blog);
-        noMore = false;
-        page = 0;
-        new MyAsyncTaskGetBlogCommentItem().execute(page);
     }
 
     private class MyAsyncTaskGetBlogCommentItem extends AsyncTask<Integer, String, List<blog_reply>> {
@@ -369,11 +355,11 @@ public class BlogDetailsActivity extends SwipeBackActivity implements View.OnCli
     private class MyAsyncTaskPostReplyItem extends AsyncTask<Integer, String, String> {
         @Override
         protected String doInBackground(Integer... pages) {
-            List<String> reply_entity = new ArrayList<>();
-            reply_entity.add(uid);
-            reply_entity.add(content);
-            reply_entity.add(bid);
-            String state = BlogItemService.executePostReply(reply_entity);
+            blog_reply blog_reply = new blog_reply();
+            blog_reply.setU_id(Integer.parseInt(uid));
+            blog_reply.setContent(content);
+            blog_reply.setB_id(Integer.parseInt(bid));
+            String state = BlogItemService.executePost(blog_reply);
             if(state.equals("评论成功"))
                 blog = BlogItemService.getBlogDetails(bid);
             return state;
@@ -381,8 +367,9 @@ public class BlogDetailsActivity extends SwipeBackActivity implements View.OnCli
 
         @Override
         protected void onPostExecute(String state) {
-            if(state.equals("评论成功")) {
-                UIUtils.customCenterShortToast(BlogDetailsActivity.this, "成功", 0 ,0 );
+            if (!state.equals("评论成功")) {
+                DisplayUtils.customCenterShortToast(BlogDetailsActivity.this, "评论失败", 0, 0);
+            } else {
                 popWindow.dismiss();
                 to_send = "";
                 refresh();

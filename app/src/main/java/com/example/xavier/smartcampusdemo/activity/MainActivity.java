@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,9 +16,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.example.xavier.smartcampusdemo.R;
@@ -34,17 +35,15 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener ,View.OnClickListener{
 
-    SharedPreferences sharedPreferences;
-    Toolbar toolbar;
     //布局控件声明
     public static FloatingActionButton fab;
+    SharedPreferences sharedPreferences;
+    Toolbar toolbar;
+    Activity activity;
+    int cachedPages = 4;
+    String TAG = "ActivityCheck" + getClass().getSimpleName();
     private ViewPager mViewPager;
     private TabLayout tabLayout;
-
-    Activity activity;
-
-    int cachedPages = 4;
-
     private List<Integer> tabIconRsc = new ArrayList<>();
     private List<Integer> tabIconRsce = new ArrayList<>();
     private List<Integer> tabColor = new ArrayList<>();
@@ -55,13 +54,27 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"onCreate");
-        setContentView(R.layout.main_app_bar);
+        setContentView(R.layout.activity_main);
         activity = this;
 
         //初始化工具栏
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("论坛");
         setSupportActionBar(toolbar);
+
+        final int sdk = Build.VERSION.SDK_INT;
+        Window window = getWindow();
+        WindowManager.LayoutParams params = window.getAttributes();
+        if (sdk >= Build.VERSION_CODES.KITKAT) {
+            int bits = 0;    // 设置透明状态栏
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+            }
+            if ((params.flags & bits) == 0) {
+                params.flags |= bits;
+                window.setAttributes(params);
+            }
+        }
         //初始化界面控件
         initLayout();
 
@@ -163,23 +176,23 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         super.onBackPressed();
     }
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
     boolean isLogged() {
         sharedPreferences = getSharedPreferences("USER_INFO", Context.MODE_PRIVATE);
         return !sharedPreferences.getAll().isEmpty();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -288,7 +301,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
-    String TAG = "ActivityCheck"+getClass().getSimpleName();
     @Override
     protected void onResume() {
         super.onResume();

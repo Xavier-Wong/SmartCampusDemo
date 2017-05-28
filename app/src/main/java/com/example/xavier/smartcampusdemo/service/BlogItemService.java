@@ -70,10 +70,10 @@ public class BlogItemService {
         return new StringBuffer("noResponse");
     }
 
-    private static String httpConnectPost(int action, List<String> params) {
+    private static String httpConnectPost(Object object) {
 
-        String post = null;
-        HttpURLConnection conn = null;
+        String post = "";
+        HttpURLConnection conn;
         String out;
 
         try {
@@ -86,12 +86,14 @@ public class BlogItemService {
             conn.setDoInput(true);
             PrintWriter printWriter = new PrintWriter(conn.getOutputStream());
 
-            if(action == 1)
-                post = "action=1&uid="+params.get(0)+"&content="+params.get(1)+"&title="+params.get(2)+"&type="+params.get(3)+"&img="+params.get(4);
-            else if(action == 2)
-                post = "action=2&uid="+params.get(0)+"&content="+params.get(1)+"&bid="+params.get(2);
-            else
-                return "wrong";
+            if (object instanceof blog) {
+                blog blog = (blog) object;
+                post = "action=1&uid=" + blog.getU_id() + "&content=" + blog.getContent() + "&img=" + blog.getImg();
+            }
+            if (object instanceof blog_reply) {
+                blog_reply blog_reply = (blog_reply) object;
+                post = "action=2&uid=" + blog_reply.getU_id() + "&content=" + blog_reply.getContent() + "&bid=" + blog_reply.getB_id();
+            }
             printWriter.write(post);
             printWriter.flush();
             BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
@@ -137,12 +139,9 @@ public class BlogItemService {
         return temp;
     }
 
-    public static String executePostReply(List<String> reply_entity) {
-
+    public static String executePost(Object entity) {
         String temp;
-        temp = httpConnectPost(2, reply_entity);
-        if (temp.equals("invalid"))
-            return "[]";
+        temp = httpConnectPost(entity);
         return temp;
     }
 

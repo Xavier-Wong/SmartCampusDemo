@@ -83,12 +83,12 @@ public class VideoItemService extends NetService {
             PrintWriter printWriter = new PrintWriter(conn.getOutputStream());
 
             if(object instanceof video) {
-                video forum = (video) object;
-                post = "action=1&uid=" +forum.getU_id()+ "&content=" + forum.getContent() + "&title=" + forum.getTitle() + "&video=" + forum.getVideo_str();
+                video video = (video) object;
+                post = "action=1&uid=" + video.getU_id() + "&content=" + video.getContent() + "&title=" + video.getTitle() + "&video=" + video.getVideo_str();
             }
             if(object instanceof video_reply) {
-                video_reply forum_reply = (video_reply) object;
-                post = "action=2&uid=" + forum_reply.getU_id() + "&content=" + forum_reply.getContent() + "&fid=" + forum_reply.getV_id();
+                video_reply video_reply = (video_reply) object;
+                post = "action=2&uid=" + video_reply.getU_id() + "&content=" + video_reply.getContent() + "&vid=" + video_reply.getV_id();
             }
             printWriter.write(post);
             printWriter.flush();

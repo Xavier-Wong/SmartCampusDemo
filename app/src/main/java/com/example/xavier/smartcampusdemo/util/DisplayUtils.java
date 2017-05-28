@@ -1,5 +1,6 @@
 package com.example.xavier.smartcampusdemo.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -9,7 +10,7 @@ import android.widget.Toast;
  *
  */
 
-public class UIUtils {
+public class DisplayUtils {
     public static void customBottomShortToast(Context context, String content, int OffsetX, int OffsetY) {
         Toast toast = Toast.makeText(context, content, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM, OffsetX, OffsetY);
@@ -26,5 +27,14 @@ public class UIUtils {
         Toast toast = Toast.makeText(context, content, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.TOP, OffsetX, OffsetY);
         toast.show();
+    }
+
+    public static int getStatusHeightPx(Activity act) {
+        int height = 0;
+        int resourceId = act.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            height = act.getResources().getDimensionPixelSize(resourceId);
+        }
+        return height;
     }
 }

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
     tools:context=".activity.VideoPublishActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/video_publish_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:background="@color/white"
+        android:fitsSystemWindows="true"
         app:navigationIcon="@drawable/ic_close_black_30dp">
         <!--<ImageView-->
         <!--android:layout_marginLeft="17dp"-->
@@ -27,34 +27,34 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:textColor="@color/black"
             android:text="@string/publish_title"
+            android:textColor="@color/black"
             android:textSize="23sp"/>
         <TextView
             android:id="@+id/video_publish_commit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:clickable="false"
             android:text="@string/publish_confirm"
             android:textColor="@color/gainsboro"
-            android:textSize="18sp"
-            android:layout_marginRight="17dp"
-            android:layout_marginEnd="17dp"
-            android:clickable="true"/>
+            android:textSize="18sp" />
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:id="@+id/video_publish_authorinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/video_publish_toolbar"
-        android:paddingBottom="10dp"
-        android:paddingLeft="17dp"
-        android:paddingRight="17dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:gravity="center">
+        android:layout_below="@+id/video_publish_toolbar"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp">
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,12 +64,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:textColor="@color/black"
+            android:focusable="true"
+            android:hint="标题"
             android:paddingLeft="17dp"
             android:paddingRight="17dp"
-            android:hint="标题"
-            android:textColorHint="@color/gainsboro"
-            android:focusable="true"/>
+            android:textColor="@color/black"
+            android:textColorHint="@color/gainsboro" />
     </LinearLayout>
     <ImageView
         android:id="@+id/divider"
@@ -83,51 +83,51 @@
         android:id="@+id/video_publish_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:background="@null"
+        android:enabled="true"
+        android:gravity="top"
+        android:hint="输入内容"
+        android:inputType="textMultiLine"
+        android:maxLines="10"
+        android:minLines="8"
         android:paddingLeft="17dp"
         android:paddingRight="17dp"
-        android:layout_below="@id/divider"
-        android:maxLines="10"
         android:scrollbars="vertical"
-        android:enabled="true"
-        android:background="@null"
-        android:inputType="textMultiLine"
-        android:minLines="8"
         android:textColor="@color/black"
-        android:hint="输入内容"
-        android:textColorHint="@color/gainsboro"
-        android:gravity="top"/>
+        android:textColorHint="@color/gainsboro" />
 
 
 
 
     <RelativeLayout
         android:id="@+id/forum_publish_foot"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
         <ProgressBar
             android:id="@+id/video_upload_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+            android:layout_height="match_parent" />
         <TextView
-            android:gravity="center"
             android:id="@+id/video_publish_upload"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="上传视频"
-            android:textColor="@color/black"
-            android:clickable="true"
+            android:alpha="0.5"
             android:background="@color/white"
-            android:alpha="0.5"/>
+            android:clickable="true"
+            android:gravity="center"
+            android:text="上传视频"
+            android:textColor="@color/black" />
     </RelativeLayout>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/divider"
-        android:layout_above="@id/forum_publish_foot"/>
+        android:layout_above="@id/forum_publish_foot"
+        android:src="@drawable/divider" />
     <!--<Button-->
     <!--android:id="@+id/forum_publish_commit"-->
     <!--android:layout_width="wrap_content"-->

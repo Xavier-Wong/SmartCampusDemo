@@ -14,15 +14,12 @@ import android.widget.VideoView;
 public class CosVideoView extends VideoView {
     public CosVideoView (Context context) {
         super(context);
-
     }
     public CosVideoView (Context context, AttributeSet attrs) {
         super(context, attrs);
-
     }
     public CosVideoView (Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:fitsSystemWindows="true"
     tools:context=".activity.ForumsDetailsActivity">
 
@@ -14,9 +13,7 @@
         android:id="@+id/forum_app_bar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/forum_collapsing_layout"
@@ -24,8 +21,8 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/customblue"
-            app:statusBarScrim="@color/customblue"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@color/customblue">
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/forum_collapsing_avatar"
